@@ -1,33 +1,67 @@
-/*
-  Copyright (c) 2021 Jakub Mandula
 
-  Example of using one PZEM module with Software Serial interface.
-  ================================================================
-
-  If only RX and TX pins are passed to the constructor, software
-  serial interface will be used for communication with the module.
-
-*/
-
-
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <WebServer.h>
+#include <ESPmDNS.h>
+#include <HTTPUpdateServer.h>
 #include <PZEM004Tv30.h>
 
 #define PZEM_RX_PIN 16
 #define PZEM_TX_PIN 17
 #define PZEM_SERIAL Serial2
 
+//  -------- ตั้งค่า wifi --------
+#ifndef STASSID
+#define STASSID "G6PD_2.4G"
+#define STAPSK  "570610193"
+#endif
+
+const char* host = "6phase";
+const char* ssid = STASSID;
+const char* password = STAPSK;
+
+WebServer httpServer(80);
+HTTPUpdateServer httpUpdater;
+
+unsigned long previousMillis = 0;
+
 void setup() {
   /* Debugging serial */
   Serial.begin(115200);
+  Serial.println();
+  Serial.println("Booting Sketch...");
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    WiFi.begin(ssid, password);
+    Serial.println("WiFi failed, retrying.");
+  }
+
+  MDNS.begin(host);
+  if (MDNS.begin(host)) {
+    Serial.println("mDNS responder started");
+  }
+
+
+  httpUpdater.setup(&httpServer);
+  httpServer.begin();
+
+  MDNS.addService("http", "tcp", 80);
+  Serial.printf("HTTPUpdateServer ready! Open http://%s.local/update in your browser\n", host);
 }
 
 void loop() {
+  httpServer.handleClient();
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= 2000) {
+    previousMillis = currentMillis;
+    displayValue();
+    Serial.println();
+  }
 
 
-
-  Serial.println();
-  delay(2000);
-  displayValue();
 }
 
 
