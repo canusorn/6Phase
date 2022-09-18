@@ -26,6 +26,24 @@ class Data_sec
     public $e3;
     public $f3;
     public $pf3;
+    public $v4;
+    public $i4;
+    public $p4;
+    public $e4;
+    public $f4;
+    public $pf4;
+    public $v5;
+    public $i5;
+    public $p5;
+    public $e5;
+    public $f5;
+    public $pf5;
+    public $v6;
+    public $i6;
+    public $p6;
+    public $e6;
+    public $f6;
+    public $pf6;
     public $time;
 
     public function __construct($esp_id)
@@ -56,6 +74,24 @@ class Data_sec
 	                                    e3	REAL,
 	                                    f3	REAL,
 	                                    pf3	REAL,
+                                        v4	REAL,
+	                                    i4	REAL,
+	                                    p4	REAL,
+	                                    e4	REAL,
+	                                    f4	REAL,
+	                                    pf4	REAL,
+                                        v5	REAL,
+	                                    i5	REAL,
+	                                    p5	REAL,
+	                                    e5	REAL,
+	                                    f5	REAL,
+	                                    pf5	REAL,
+                                        v6	REAL,
+	                                    i6	REAL,
+	                                    p6	REAL,
+	                                    e6	REAL,
+	                                    f6	REAL,
+	                                    pf6	REAL,
 	                                    time TEXT NOT NULL UNIQUE)',
             'CREATE INDEX IF NOT EXISTS time_index ON \'sec\' (time);'
         ];
@@ -75,7 +111,7 @@ class Data_sec
 
     public function insert()
     {
-        $sql = "INSERT INTO 'sec' VALUES(:v1,:i1,:p1,:e1,:f1,:pf1,:v2,:i2,:p2,:e2,:f2,:pf2,:v3,:i3,:p3,:e3,:f3,:pf3,:time)";
+        $sql = "INSERT INTO 'sec' VALUES(:v1,:i1,:p1,:e1,:f1,:pf1,:v2,:i2,:p2,:e2,:f2,:pf2,:v3,:i3,:p3,:e3,:f3,:pf3,:v4,:i4,:p4,:e4,:f4,:pf4,:v5,:i5,:p5,:e5,:f5,:pf5,:v6,:i6,:p6,:e6,:f6,:pf6,:time)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':v1', $this->v1);
         $stmt->bindValue(':i1', $this->i1);
@@ -95,6 +131,24 @@ class Data_sec
         $stmt->bindValue(':e3', $this->e3);
         $stmt->bindValue(':f3', $this->f3);
         $stmt->bindValue(':pf3', $this->pf3);
+        $stmt->bindValue(':v4', $this->v4);
+        $stmt->bindValue(':i4', $this->i4);
+        $stmt->bindValue(':p4', $this->p4);
+        $stmt->bindValue(':e4', $this->e4);
+        $stmt->bindValue(':f4', $this->f4);
+        $stmt->bindValue(':pf4', $this->pf4);
+        $stmt->bindValue(':v5', $this->v5);
+        $stmt->bindValue(':i5', $this->i5);
+        $stmt->bindValue(':p5', $this->p5);
+        $stmt->bindValue(':e5', $this->e5);
+        $stmt->bindValue(':f5', $this->f5);
+        $stmt->bindValue(':pf5', $this->pf5);
+        $stmt->bindValue(':v6', $this->v6);
+        $stmt->bindValue(':i6', $this->i6);
+        $stmt->bindValue(':p6', $this->p6);
+        $stmt->bindValue(':e6', $this->e6);
+        $stmt->bindValue(':f6', $this->f6);
+        $stmt->bindValue(':pf6', $this->pf6);
         $stmt->bindValue(':time', $this->time);
         if ($stmt->execute()) {
             return true;
@@ -116,15 +170,6 @@ class Data_sec
         //var_dump($sql);
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
-
-    // public static function checkExist($pdo, $tablename)
-    // {
-    //     $sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='{$tablename}'";
-    //     $pdo = new \PDO("sqlite:" . $_SERVER['DOCUMENT_ROOT'] . "/db/$esp_id.db");
-    //     //var_dump($sql);
-    //     $stmt = $pdo->query($sql);
-    //     return $stmt->fetch();
-    // }
 
 
     public static function getLast($esp_id, $columns = '*')
@@ -154,7 +199,7 @@ class Data_sec
     public static function getMinEnergy($esp_id, $time)
     {
         $pdo = new \PDO("sqlite:" . $_SERVER['DOCUMENT_ROOT'] . "/db/$esp_id.db");
-        $sql = "SELECT min(e1),min(e2),min(e3) 
+        $sql = "SELECT min(e1),min(e2),min(e3),min(e4),min(e5),min(e6) 
         FROM 'sec' 
         WHERE DATE(time) = DATE('{$time}');";
         $stmt = $pdo->prepare($sql);
@@ -198,6 +243,9 @@ class Data_sec
         $sql = "SELECT printf('%.1f',avg(v1)),printf('%.3f',avg(i1)),printf('%.1f',avg(p1)),printf('%.3f',max(e1)),printf('%.1f',avg(f1)),printf('%.2f',avg(pf1))
                       ,printf('%.1f',avg(v2)),printf('%.3f',avg(i2)),printf('%.1f',avg(p2)),printf('%.3f',max(e2)),printf('%.1f',avg(f2)),printf('%.2f',avg(pf2))
                       ,printf('%.1f',avg(v3)),printf('%.3f',avg(i3)),printf('%.1f',avg(p3)),printf('%.3f',max(e3)),printf('%.1f',avg(f3)),printf('%.2f',avg(pf3))
+                      ,printf('%.1f',avg(v4)),printf('%.3f',avg(i4)),printf('%.1f',avg(p4)),printf('%.3f',max(e4)),printf('%.1f',avg(f4)),printf('%.2f',avg(pf4))
+                      ,printf('%.1f',avg(v5)),printf('%.3f',avg(i5)),printf('%.1f',avg(p5)),printf('%.3f',max(e5)),printf('%.1f',avg(f5)),printf('%.2f',avg(pf5))
+                      ,printf('%.1f',avg(v6)),printf('%.3f',avg(i6)),printf('%.1f',avg(p6)),printf('%.3f',max(e6)),printf('%.1f',avg(f6)),printf('%.2f',avg(pf6))
                 FROM 'sec' 
                 WHERE time LIKE '{$time}%';";
         //var_dump($sql);
