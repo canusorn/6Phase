@@ -13,20 +13,21 @@
 
 //  -------- ตั้งค่า wifi --------
 #ifndef STASSID
-#define STASSID "G6PD_2.4G"
-#define STAPSK  "570610193"
+#define STASSID "wifi_ssid"
+#define STAPSK "wifi_pass"
 #endif
-
-const char* host = "6phase";
-const char* ssid = STASSID;
-const char* password = STAPSK;
+String server = "192.168.0.101";
+const char *host = "6phase";
+const char *ssid = STASSID;
+const char *password = STAPSK;
 
 WebServer httpServer(80);
 HTTPUpdateServer httpUpdater;
 
 unsigned long previousMillis = 0;
 
-void setup() {
+void setup()
+{
   /* Debugging serial */
   Serial.begin(115200);
   Serial.println();
@@ -34,7 +35,8 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
-  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+  while (WiFi.waitForConnectResult() != WL_CONNECTED)
+  {
     WiFi.begin(ssid, password);
     Serial.println("WiFi failed, retrying.");
   }
@@ -44,10 +46,10 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   MDNS.begin(host);
-  if (MDNS.begin(host)) {
+  if (MDNS.begin(host))
+  {
     Serial.println("mDNS responder started");
   }
-
 
   httpUpdater.setup(&httpServer);
   httpServer.begin();
@@ -56,19 +58,18 @@ void setup() {
   Serial.printf("HTTPUpdateServer ready! Open http://%s.local/update in your browser\n", host);
 }
 
-void loop() {
+void loop()
+{
   httpServer.handleClient();
 
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= 2000) {
+  if (currentMillis - previousMillis >= 2000)
+  {
     previousMillis = currentMillis;
     readValue();
     Serial.println();
   }
-
-
 }
-
 
 void readValue()
 {
@@ -134,56 +135,68 @@ void readValue()
   postData(voltage, current, power, energy, frequency, pf);
 }
 
-void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float pf[6]) {
+void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float pf[6])
+{
 
-  if ((WiFi.status() == WL_CONNECTED)) {
-
-//    for (uint8_t i = 0; i < 6; i++)
-//    {
-//      if (var_index_3p[i])
-//      { // validate
-//        if (v >= 60 && v <= 260 && !isnan(v))
-//          _json_update += ",\"v" + String(i + 1) + "\":" + String(v, 1);
-//        if (i >= 0 && i <= 100 && !isnan(i))
-//          _json_update += ",\"i" + String(i + 1) + "\":" + String(a, 3);
-//        if (p >= 0 && p <= 24000 && !isnan(p))
-//          _json_update += ",\"p" + String(i + 1) + "\":" + String(p, 1);
-//        if (e >= 0 && e <= 10000 && !isnan(e))
-//          _json_update += ",\"e" + String(i + 1) + "\":" + String(e, 3);
-//        if (f >= 40 && f <= 70 && !isnan(f))
-//          _json_update += ",\"f" + String(i + 1) + "\":" + String(f, 1);
-//        if (pf >= 0 && pf <= 1 && !isnan(pf))
-//          _json_update += ",\"pf" + String(i + 1) + "\":" + String(pf, 2);
-//      }
-//    }
-
-
-
-    HTTPClient http;
-
-    Serial.print("[HTTP] begin...\n");
-    // configure traged server and url
-    //http.begin("https://www.howsmyssl.com/a/check", ca); //HTTPS
-    http.begin("http://example.com/index.html"); //HTTP
-
-    Serial.print("[HTTP] GET...\n");
-    // start connection and send HTTP header
-    int httpCode = http.GET();
-
-    // httpCode will be negative on error
-    if (httpCode > 0) {
-      // HTTP header has been send and Server response header has been handled
-      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
-
-      // file found at server
-      if (httpCode == HTTP_CODE_OK) {
-        String payload = http.getString();
-        Serial.println(payload);
-      }
-    } else {
-      Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+  if ((WiFi.status() == WL_CONNECTED))
+  {
+    uint32_t chipId = 0;
+    for (int i = 0; i < 17; i = i + 8)
+    {
+      chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
     }
 
-    http.end();
+    String _json_update = "{\"esp_id\":" + String(chipId) + ",\"data\":";
+
+    for (uint8_t i = 0; i < 6; i++)
+    {
+      { // validate
+        if (v[i] >= 60 && v[i] <= 260 && !isnan(v[i]))
+          _json_update += ",\"v" + String(i + 1) + "\":" + String(v[i], 1);
+        if (a[i] >= 0 && a[i] <= 100 && !isnan(a[i]))
+          _json_update += ",\"i" + String(i + 1) + "\":" + String(a[i], 3);
+        if (p[i] >= 0 && p[i] <= 24000 && !isnan(p[i]))
+          _json_update += ",\"p" + String(i + 1) + "\":" + String(p[i], 1);
+        if (e[i] >= 0 && e[i] <= 10000 && !isnan(e[i]))
+          _json_update += ",\"e" + String(i + 1) + "\":" + String(e[i], 3);
+        if (f[i] >= 40 && f[i] <= 70 && !isnan(f[i]))
+          _json_update += ",\"f" + String(i + 1) + "\":" + String(f[i], 1);
+        if (pf[i] >= 0 && pf[i] <= 1 && !isnan(pf[i]))
+          _json_update += ",\"pf" + String(i + 1) + "\":" + String(pf[i], 2);
+      }
+
+      _json_update += "}}";
+
+      HTTPClient http;
+
+      Serial.print("[HTTP] begin...\n");
+      // configure traged server and url
+      // http.begin("https://www.howsmyssl.com/a/check", ca); //HTTPS
+      http.begin("http://" + server + "/api/update.php"); // HTTP
+
+      Serial.print("[HTTP] POST...\n");
+      // start connection and send HTTP header
+      int httpCode = http.POST(_json_update);
+
+      // httpCode will be negative on error
+      if (httpCode > 0)
+      {
+        // HTTP header has been send and Server response header has been handled
+        Serial.printf("[HTTP] POST... code: %d\n", httpCode);
+
+        // file found at server
+        if (httpCode == HTTP_CODE_OK)
+        {
+          String payload = http.getString();
+          Serial.println(payload);
+        }
+      }
+      else
+      {
+        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+      }
+
+      http.end();
+    }
   }
 }
