@@ -98,6 +98,14 @@ void readValue()
       pf[i] = NAN;
     }
 
+    // test data
+    // voltage[i] = 200 + i;
+    // current[i] = 1;
+    // power[i] = voltage[i] * current[i] * 0.84;
+    // energy[i] = 2;
+    // frequency[i] = 50;
+    // pf[i] = 0.84;
+
     //------Serial display------
     Serial.print(F("PZEM "));
     Serial.print(i);
@@ -146,12 +154,15 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
       chipId |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
     }
 
-    String _json_update = "{\"esp_id\":" + String(chipId) + ",\"data\":";
+    String _json_update = "{\"esp_id\":" + String(chipId) + ",\"data\":{";
 
     for (uint8_t i = 0; i < 6; i++)
     { // validate
+      if (i)
+        _json_update += ",";
+
       if (v[i] >= 60 && v[i] <= 260 && !isnan(v[i]))
-        _json_update += ",\"v" + String(i + 1) + "\":" + String(v[i], 1);
+        _json_update += "\"v" + String(i + 1) + "\":" + String(v[i], 1);
       if (a[i] >= 0 && a[i] <= 100 && !isnan(a[i]))
         _json_update += ",\"i" + String(i + 1) + "\":" + String(a[i], 3);
       if (p[i] >= 0 && p[i] <= 24000 && !isnan(p[i]))
@@ -165,6 +176,8 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
     }
 
     _json_update += "}}";
+
+    Serial.println("payload:" + _json_update);
 
     HTTPClient http;
 
