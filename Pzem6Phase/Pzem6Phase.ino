@@ -149,54 +149,50 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
     String _json_update = "{\"esp_id\":" + String(chipId) + ",\"data\":";
 
     for (uint8_t i = 0; i < 6; i++)
-    {
-      { // validate
-        if (v[i] >= 60 && v[i] <= 260 && !isnan(v[i]))
-          _json_update += ",\"v" + String(i + 1) + "\":" + String(v[i], 1);
-        if (a[i] >= 0 && a[i] <= 100 && !isnan(a[i]))
-          _json_update += ",\"i" + String(i + 1) + "\":" + String(a[i], 3);
-        if (p[i] >= 0 && p[i] <= 24000 && !isnan(p[i]))
-          _json_update += ",\"p" + String(i + 1) + "\":" + String(p[i], 1);
-        if (e[i] >= 0 && e[i] <= 10000 && !isnan(e[i]))
-          _json_update += ",\"e" + String(i + 1) + "\":" + String(e[i], 3);
-        if (f[i] >= 40 && f[i] <= 70 && !isnan(f[i]))
-          _json_update += ",\"f" + String(i + 1) + "\":" + String(f[i], 1);
-        if (pf[i] >= 0 && pf[i] <= 1 && !isnan(pf[i]))
-          _json_update += ",\"pf" + String(i + 1) + "\":" + String(pf[i], 2);
-      }
-
-      _json_update += "}}";
-
-      HTTPClient http;
-
-      Serial.print("[HTTP] begin...\n");
-      // configure traged server and url
-      // http.begin("https://www.howsmyssl.com/a/check", ca); //HTTPS
-      http.begin("http://" + server + "/api/update.php"); // HTTP
-
-      Serial.print("[HTTP] POST...\n");
-      // start connection and send HTTP header
-      int httpCode = http.POST(_json_update);
-
-      // httpCode will be negative on error
-      if (httpCode > 0)
-      {
-        // HTTP header has been send and Server response header has been handled
-        Serial.printf("[HTTP] POST... code: %d\n", httpCode);
-
-        // file found at server
-        if (httpCode == HTTP_CODE_OK)
-        {
-          String payload = http.getString();
-          Serial.println(payload);
-        }
-      }
-      else
-      {
-        Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
-      }
-
-      http.end();
+    { // validate
+      if (v[i] >= 60 && v[i] <= 260 && !isnan(v[i]))
+        _json_update += ",\"v" + String(i + 1) + "\":" + String(v[i], 1);
+      if (a[i] >= 0 && a[i] <= 100 && !isnan(a[i]))
+        _json_update += ",\"i" + String(i + 1) + "\":" + String(a[i], 3);
+      if (p[i] >= 0 && p[i] <= 24000 && !isnan(p[i]))
+        _json_update += ",\"p" + String(i + 1) + "\":" + String(p[i], 1);
+      if (e[i] >= 0 && e[i] <= 10000 && !isnan(e[i]))
+        _json_update += ",\"e" + String(i + 1) + "\":" + String(e[i], 3);
+      if (f[i] >= 40 && f[i] <= 70 && !isnan(f[i]))
+        _json_update += ",\"f" + String(i + 1) + "\":" + String(f[i], 1);
+      if (pf[i] >= 0 && pf[i] <= 1 && !isnan(pf[i]))
+        _json_update += ",\"pf" + String(i + 1) + "\":" + String(pf[i], 2);
     }
+
+    _json_update += "}}";
+
+    HTTPClient http;
+
+    Serial.print("[HTTP] begin...\n");
+    http.begin("http://" + server + "/api/update.php"); // HTTP
+
+    Serial.print("[HTTP] POST...\n");
+    // start connection and send HTTP header
+    int httpCode = http.POST(_json_update);
+
+    // httpCode will be negative on error
+    if (httpCode > 0)
+    {
+      // HTTP header has been send and Server response header has been handled
+      Serial.printf("[HTTP] POST... code: %d\n", httpCode);
+
+      // file found at server
+      if (httpCode == HTTP_CODE_OK)
+      {
+        String payload = http.getString();
+        Serial.println(payload);
+      }
+    }
+    else
+    {
+      Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
+    }
+
+    http.end();
   }
 }
