@@ -203,10 +203,10 @@ class Data_hr
         $sql = "SELECT printf('%.1f',avg(v1)),printf('%.3f',avg(i1)),printf('%.1f',avg(p1)),printf('%.3f',max(e1)-min(e1)),printf('%.1f',avg(f1)),printf('%.2f',avg(pf1))
                       ,printf('%.1f',avg(v2)),printf('%.3f',avg(i2)),printf('%.1f',avg(p2)),printf('%.3f',max(e2)-min(e2)),printf('%.1f',avg(f2)),printf('%.2f',avg(pf2))
                       ,printf('%.1f',avg(v3)),printf('%.3f',avg(i3)),printf('%.1f',avg(p3)),printf('%.3f',max(e3)-min(e3)),printf('%.1f',avg(f3)),printf('%.2f',avg(pf3))
-                      ,printf('%.1f',avg(v4)),printf('%.3f',avg(i4)),printf('%.1f',avg(p4)),printf('%.3f',max(e4)),printf('%.1f',avg(f4)),printf('%.2f',avg(pf4))
-                      ,printf('%.1f',avg(v5)),printf('%.3f',avg(i5)),printf('%.1f',avg(p5)),printf('%.3f',max(e5)),printf('%.1f',avg(f5)),printf('%.2f',avg(pf5))
-                      ,printf('%.1f',avg(v6)),printf('%.3f',avg(i6)),printf('%.1f',avg(p6)),printf('%.3f',max(e6)),printf('%.1f',avg(f6)),printf('%.2f',avg(pf6))
-                FROM '6_min' 
+                      ,printf('%.1f',avg(v4)),printf('%.3f',avg(i4)),printf('%.1f',avg(p4)),printf('%.3f',max(e4)-min(e4)),printf('%.1f',avg(f4)),printf('%.2f',avg(pf4))
+                      ,printf('%.1f',avg(v5)),printf('%.3f',avg(i5)),printf('%.1f',avg(p5)),printf('%.3f',max(e5)-min(e5)),printf('%.1f',avg(f5)),printf('%.2f',avg(pf5))
+                      ,printf('%.1f',avg(v6)),printf('%.3f',avg(i6)),printf('%.1f',avg(p6)),printf('%.3f',max(e6)-min(e6)),printf('%.1f',avg(f6)),printf('%.2f',avg(pf6))
+                FROM 'min' 
                 WHERE time LIKE '{$time}%';";
         //var_dump($sql);
         $stmt = $pdo->prepare($sql);

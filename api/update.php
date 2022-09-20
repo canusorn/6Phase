@@ -131,6 +131,25 @@ if ($interval_min && $needsecupdate) {
         $data_min->f3 = $data_sec_av[16];
         $data_min->pf3 = $data_sec_av[17];
 
+        $data_min->v4 = $data_sec_av[18];
+        $data_min->i4 = $data_sec_av[19];
+        $data_min->p4 = $data_sec_av[20];
+        $data_min->e4 = $data_sec_av[21];
+        $data_min->f4 = $data_sec_av[22];
+        $data_min->pf4 = $data_sec_av[23];
+        $data_min->v5 = $data_sec_av[24];
+        $data_min->i5 = $data_sec_av[25];
+        $data_min->p5 = $data_sec_av[26];
+        $data_min->e5 = $data_sec_av[27];
+        $data_min->f5 = $data_sec_av[28];
+        $data_min->pf5 = $data_sec_av[29];
+        $data_min->v6 = $data_sec_av[30];
+        $data_min->i6 = $data_sec_av[31];
+        $data_min->p6 = $data_sec_av[32];
+        $data_min->e6 = $data_sec_av[33];
+        $data_min->f6 = $data_sec_av[34];
+        $data_min->pf6 = $data_sec_av[35];
+
         if (($re = $data_min->insert()) === true) {
             $payload["status"]["min"] = 'new min data';
         } else {
@@ -167,6 +186,25 @@ if ($interval_min && $needsecupdate) {
             $data_hr->e3 = $data_min_av[15];
             $data_hr->f3 = $data_min_av[16];
             $data_hr->pf3 = $data_min_av[17];
+
+            $data_hr->v4 = $data_min_av[18];
+            $data_hr->i4 = $data_min_av[19];
+            $data_hr->p4 = $data_min_av[20];
+            $data_hr->e4 = $data_min_av[21];
+            $data_hr->f4 = $data_min_av[22];
+            $data_hr->pf4 = $data_min_av[23];
+            $data_hr->v5 = $data_min_av[24];
+            $data_hr->i5 = $data_min_av[25];
+            $data_hr->p5 = $data_min_av[26];
+            $data_hr->e5 = $data_min_av[27];
+            $data_hr->f5 = $data_min_av[28];
+            $data_hr->pf5 = $data_min_av[29];
+            $data_hr->v6 = $data_min_av[30];
+            $data_hr->i6 = $data_min_av[31];
+            $data_hr->p6 = $data_min_av[32];
+            $data_hr->e6 = $data_min_av[33];
+            $data_hr->f6 = $data_min_av[34];
+            $data_hr->pf6 = $data_min_av[35];
 
             if (($re = $data_hr->insert()) === true) {
                 $payload["status"]["hr"] = 'new hr data';
@@ -227,6 +265,25 @@ if ($interval_min && $needsecupdate) {
                     $data_day->f3 = $data_hr_av[16];
                     $data_day->pf3 = $data_hr_av[17];
 
+                    $data_day->v4 = $data_hr_av[18];
+                    $data_day->i4 = $data_hr_av[19];
+                    $data_day->p4 = $data_hr_av[20];
+                    $data_day->e4 = $data_hr_av[21];
+                    $data_day->f4 = $data_hr_av[22];
+                    $data_day->pf4 = $data_hr_av[23];
+                    $data_day->v5 = $data_hr_av[24];
+                    $data_day->i5 = $data_hr_av[25];
+                    $data_day->p5 = $data_hr_av[26];
+                    $data_day->e5 = $data_hr_av[27];
+                    $data_day->f5 = $data_hr_av[28];
+                    $data_day->pf5 = $data_hr_av[29];
+                    $data_day->v6 = $data_hr_av[30];
+                    $data_day->i6 = $data_hr_av[31];
+                    $data_day->p6 = $data_hr_av[32];
+                    $data_day->e6 = $data_hr_av[33];
+                    $data_day->f6 = $data_hr_av[34];
+                    $data_day->pf6 = $data_hr_av[35];
+
                     if (($re = $data_day->insert()) === true) {
                         $payload["status"]["day"] = 'new day data';
                     } else {
@@ -261,6 +318,25 @@ if ($interval_min && $needsecupdate) {
                 $data_day->e3 = $data_hr_av[15];
                 $data_day->f3 = $data_hr_av[16];
                 $data_day->pf3 = $data_hr_av[17];
+
+                $data_day->v4 = $data_hr_av[18];
+                $data_day->i4 = $data_hr_av[19];
+                $data_day->p4 = $data_hr_av[20];
+                $data_day->e4 = $data_hr_av[21];
+                $data_day->f4 = $data_hr_av[22];
+                $data_day->pf4 = $data_hr_av[23];
+                $data_day->v5 = $data_hr_av[24];
+                $data_day->i5 = $data_hr_av[25];
+                $data_day->p5 = $data_hr_av[26];
+                $data_day->e5 = $data_hr_av[27];
+                $data_day->f5 = $data_hr_av[28];
+                $data_day->pf5 = $data_hr_av[29];
+                $data_day->v6 = $data_hr_av[30];
+                $data_day->i6 = $data_hr_av[31];
+                $data_day->p6 = $data_hr_av[32];
+                $data_day->e6 = $data_hr_av[33];
+                $data_day->f6 = $data_hr_av[34];
+                $data_day->pf6 = $data_hr_av[35];
 
                 if (($re = $data_day->insert()) === true) {
                     $payload["status"]["day"] = 'new day data';
