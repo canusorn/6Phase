@@ -1,33 +1,70 @@
+/*
+  Copyright (c) 2021 Jakub Mandula
+
+  Example of using multiple PZEM modules together on one ModBUS.
+  ================================================================
+
+  First of all, use the PZEMChangeAddress example in order to assign
+  each individual PZEM module a unique custom address. This example
+  requires 2 PZEM modules with addresses 0x10 and 0x11.
+
+
+  Then for each PZEM module create a PZEM004Tv30 instance passing a custom address
+  to the address field.
+
+  The instances can either be stored as individual objects:
+
+  ```c
+  PZEM004Tv30 pzem0(&Serial2, 0x10);
+  PZEM004Tv30 pzem1(&Serial2, 0x11);
+  PZEM004Tv30 pzem2(&Serial2, 0x12);
+
+  pzem0.voltage();
+  pzem1.pf();
+  ```
+
+  Or in an array and addressed using the array index:
+
+  ```c
+  PZEM004Tv30 pzems[] = {
+    PZEM004Tv30(&Serial2, 0x10),
+    PZEM004Tv30(&Serial2, 0x11),
+    PZEM004Tv30(&Serial2, 0x12)};
+
+  pzems[0].voltage();
+  pzems[1].pf();
+  ```
+
+*/
 
 #include <WiFi.h>
-#include <WiFiClient.h>
 #include <HTTPClient.h>
-#include <WebServer.h>
-#include <ESPmDNS.h>
-#include <HTTPUpdateServer.h>
 #include <PZEM004Tv30.h>
 
+
+#if !defined(PZEM_RX_PIN) && !defined(PZEM_TX_PIN)
 #define PZEM_RX_PIN 16
 #define PZEM_TX_PIN 17
+#endif
+
+#if !defined(PZEM_SERIAL)
 #define PZEM_SERIAL Serial2
+#endif
+
+#define NUM_PZEMS 6
+
+PZEM004Tv30 pzems[NUM_PZEMS];
 
 //  -------- ตั้งค่า wifi --------
 #ifndef STASSID
 #define STASSID "wifi_ssid"
 #define STAPSK "wifi_pass"
 #endif
-String server = "192.168.0.101";
-const char *host = "6phase";
+String server = "192.168.0.100";
 const char *ssid = STASSID;
 const char *password = STAPSK;
 
-WebServer httpServer(80);
-HTTPUpdateServer httpUpdater;
-
-unsigned long previousMillis = 0;
-
-void setup()
-{
+void setup() {
   /* Debugging serial */
   Serial.begin(115200);
   Serial.println();
@@ -35,113 +72,74 @@ void setup()
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
-  while (WiFi.waitForConnectResult() != WL_CONNECTED)
-  {
-    WiFi.begin(ssid, password);
-    Serial.println("WiFi failed, retrying.");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
 
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-
-  MDNS.begin(host);
-  if (MDNS.begin(host))
+  // For each PZEM, initialize it
+  for (int i = 0; i < NUM_PZEMS; i++)
   {
-    Serial.println("mDNS responder started");
-  }
-
-  httpUpdater.setup(&httpServer);
-  httpServer.begin();
-
-  MDNS.addService("http", "tcp", 80);
-  Serial.printf("HTTPUpdateServer ready! Open http://%s.local/update in your browser\n", host);
-}
-
-void loop()
-{
-  httpServer.handleClient();
-
-  unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= 2000)
-  {
-    previousMillis = currentMillis;
-    readValue();
-    Serial.println();
+    // Initialize the PZEMs with Hardware Serial2 on RX/TX pins 16 and 17
+    pzems[i] = PZEM004Tv30(PZEM_SERIAL, PZEM_RX_PIN, PZEM_TX_PIN, 0x01 + i);
   }
 }
 
-void readValue()
-{
 
-  PZEM004Tv30 pzems[] = {PZEM004Tv30(PZEM_SERIAL, PZEM_RX_PIN, PZEM_TX_PIN, 0x01), PZEM004Tv30(PZEM_SERIAL, PZEM_RX_PIN, PZEM_TX_PIN, 0x02), PZEM004Tv30(PZEM_SERIAL, PZEM_RX_PIN, PZEM_TX_PIN, 0x03), PZEM004Tv30(PZEM_SERIAL, PZEM_RX_PIN, PZEM_TX_PIN, 0x04), PZEM004Tv30(PZEM_SERIAL, PZEM_RX_PIN, PZEM_TX_PIN, 0x05), PZEM004Tv30(PZEM_SERIAL, PZEM_RX_PIN, PZEM_TX_PIN, 0x06)}; // array of pzem 3 phase
+
+void loop() {
   float voltage[6], current[6], power[6], energy[6], frequency[6], pf[6];
-
-  for (int i = 0; i < 6; i++)
-  {
-    //------read data------
-    voltage[i] = pzems[i].voltage();
-    if (!isnan(voltage[i]))
-    { // ถ้าอ่านค่าได้
-      current[i] = pzems[i].current();
-      power[i] = pzems[i].power();
-      energy[i] = pzems[i].energy();
-      frequency[i] = pzems[i].frequency();
-      pf[i] = pzems[i].pf();
-    }
-    else
-    { // ถ้าอ่านค่าไม่ได้ให้ใส่ค่า NAN(not a number)
-      current[i] = NAN;
-      power[i] = NAN;
-      energy[i] = NAN;
-      frequency[i] = NAN;
-      pf[i] = NAN;
-    }
-
-    // test data
-    // voltage[i] = 200 + i;
-    // current[i] = 1;
-    // power[i] = voltage[i] * current[i] * 0.84;
-    // energy[i] = 2;
-    // frequency[i] = 50;
-    // pf[i] = 0.84;
-
-    //------Serial display------
-    Serial.print(F("PZEM "));
+  // Print out the measured values from each PZEM module
+  for (int i = 0; i < NUM_PZEMS; i++) {
+    // Print the Address of the PZEM
+    Serial.print("PZEM ");
     Serial.print(i);
-    Serial.print(F(" - Address:"));
+    Serial.print(" - Address:");
     Serial.println(pzems[i].getAddress(), HEX);
-    Serial.println(F("==================="));
-    if (!isnan(voltage[i]))
-    {
-      Serial.print(F("Voltage: "));
-      Serial.print(voltage[i]);
-      Serial.println("V");
-      Serial.print(F("Current: "));
-      Serial.print(current[i]);
-      Serial.println(F("A"));
-      Serial.print(F("Power: "));
-      Serial.print(power[i]);
-      Serial.println(F("W"));
-      Serial.print(F("Energy: "));
-      Serial.print(energy[i], 3);
-      Serial.println(F("kWh"));
-      Serial.print(F("Frequency: "));
-      Serial.print(frequency[i], 1);
-      Serial.println(F("Hz"));
-      Serial.print(F("PF: "));
-      Serial.println(pf[i]);
+    Serial.println("===================");
+
+
+    // Read the data from the sensor
+    voltage[i] = pzems[i].voltage();
+    current[i] = pzems[i].current();
+    power[i] = pzems[i].power();
+    energy[i] = pzems[i].energy();
+    frequency[i] = pzems[i].frequency();
+    pf[i] = pzems[i].pf();
+
+
+    // Check if the data is valid
+    if (isnan(voltage[i])) {
+      Serial.println("Error reading voltage");
+    } else if (isnan(current[i])) {
+      Serial.println("Error reading current");
+    } else if (isnan(power[i])) {
+      Serial.println("Error reading power");
+    } else if (isnan(energy[i])) {
+      Serial.println("Error reading energy");
+    } else if (isnan(frequency[i])) {
+      Serial.println("Error reading frequency");
+    } else if (isnan(pf[i])) {
+      Serial.println("Error reading power factor");
+    } else {
+      // Print the values to the Serial console
+      Serial.print("Voltage: ");      Serial.print(voltage[i]);      Serial.println("V");
+      Serial.print("Current: ");      Serial.print(current[i]);      Serial.println("A");
+      Serial.print("Power: ");        Serial.print(power[i]);        Serial.println("W");
+      Serial.print("Energy: ");       Serial.print(energy[i], 3);     Serial.println("kWh");
+      Serial.print("Frequency: ");    Serial.print(frequency[i], 1); Serial.println("Hz");
+      Serial.print("PF: ");           Serial.println(pf[i]);
+
     }
-    else
-    {
-      Serial.println("No sensor detect");
-    }
-    Serial.println(F("-------------------"));
+
+    Serial.println("-------------------");
     Serial.println();
   }
-
   postData(voltage, current, power, energy, frequency, pf);
+  Serial.println();
+  delay(2000);
 }
+
 
 void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float pf[6])
 {
@@ -161,17 +159,17 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
       if (i)
         _json_update += ",";
 
-      if (v[i] >= 60 && v[i] <= 260 && !isnan(v[i]))
+//      if (v[i] >= 60 && v[i] <= 260 && !isnan(v[i]))
         _json_update += "\"v" + String(i + 1) + "\":" + String(v[i], 1);
-      if (a[i] >= 0 && a[i] <= 100 && !isnan(a[i]))
+//      if (a[i] >= 0 && a[i] <= 100 && !isnan(a[i]))
         _json_update += ",\"i" + String(i + 1) + "\":" + String(a[i], 3);
-      if (p[i] >= 0 && p[i] <= 24000 && !isnan(p[i]))
+//      if (p[i] >= 0 && p[i] <= 24000 && !isnan(p[i]))
         _json_update += ",\"p" + String(i + 1) + "\":" + String(p[i], 1);
-      if (e[i] >= 0 && e[i] <= 10000 && !isnan(e[i]))
+//      if (e[i] >= 0 && e[i] <= 10000 && !isnan(e[i]))
         _json_update += ",\"e" + String(i + 1) + "\":" + String(e[i], 3);
-      if (f[i] >= 40 && f[i] <= 70 && !isnan(f[i]))
+//      if (f[i] >= 40 && f[i] <= 70 && !isnan(f[i]))
         _json_update += ",\"f" + String(i + 1) + "\":" + String(f[i], 1);
-      if (pf[i] >= 0 && pf[i] <= 1 && !isnan(pf[i]))
+//      if (pf[i] >= 0 && pf[i] <= 1 && !isnan(pf[i]))
         _json_update += ",\"pf" + String(i + 1) + "\":" + String(pf[i], 2);
     }
 
