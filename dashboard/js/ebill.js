@@ -1,6 +1,6 @@
 // $(function () {
 
-var ft = 0.2477;
+var ft = 0.9343;
 var maintenance_cost111 = 8.19;
 var maintenance_cost112 = 38.22;
 

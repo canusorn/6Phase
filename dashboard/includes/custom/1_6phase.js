@@ -7,9 +7,9 @@ $(document).ready(function () {
         volt4 = [], curr4 = [], power4 = [], energy4 = [], freq4 = [], p_f4 = [],
         volt5 = [], curr5 = [], power5 = [], energy5 = [], freq5 = [], p_f5 = [],
         volt6 = [], curr6 = [], power6 = [], energy6 = [], freq6 = [], p_f6 = [],
-        label1 = [], label2 = [];
+        label1 = [];
     var min_e1, min_e2, min_e3, min_e4, min_e5, min_e6;
-    var eAll1, eAll2, _eAll_month;
+    var _eAll_month;
     var kwh_per_energy = 4.2;
 
     // day
@@ -27,8 +27,8 @@ $(document).ready(function () {
         volt4_history = [], curr4_history = [], power4_history = [], energy4_history = [], freq4_history = [], p_f4_history = [],
         volt5_history = [], curr5_history = [], power5_history = [], energy5_history = [], freq5_history = [], p_f5_history = [],
         volt6_history = [], curr6_history = [], power6_history = [], energy6_history = [], freq6_history = [], p_f6_history = [],
-        label1_history = [], label2_history = [],
-        label1_timestamp = [], label2_timestamp = [],
+        label1_history = [],
+        label1_timestamp = [],
         uplot1, uplot2, uplot3, uplot4, uplot5, uplot6;
 
 
@@ -1620,8 +1620,8 @@ $(document).ready(function () {
                     overlayNodata();
                     return;
                 }
-                console.log(data);
-                // try {
+                // console.log(data);
+                try {
                     var json = JSON.parse(data);
                     // console.log(json);
                     json.v1.reverse();
@@ -1799,7 +1799,7 @@ $(document).ready(function () {
                     let _e4 = parseFloat(json.e4[json.e4.length - 1]) - min_e4;
                     let _e5 = parseFloat(json.e5[json.e5.length - 1]) - min_e5;
                     let _e6 = parseFloat(json.e6[json.e6.length - 1]) - min_e6;
-                    let _eAll = _e1 + _e2 + _e3+_e4 + _e5 + _e6;
+                    let _eAll = _e1 + _e2 + _e3 + _e4 + _e5 + _e6;
                     _eAll_month = parseFloat(json.sum_e1) + parseFloat(json.sum_e2) + parseFloat(json.sum_e3) + parseFloat(json.sum_e4) + parseFloat(json.sum_e5) + parseFloat(json.sum_e6);
 
                     $("#voltage1").html(json.v1[json.v1.length - 1]);
@@ -1981,11 +1981,11 @@ $(document).ready(function () {
 
                     $(".overlay").fadeOut(100);
                     setInterval(updateLastData, 5000); // 1000 = 1 second
-                // }
-                // catch (err) {
-                //     console.log(err.message);
-                //     overlayNodata();
-                // }
+                }
+                catch (err) {
+                    console.log(err.message);
+                    overlayNodata();
+                }
             },
             error: function () {
                 overlayNodata();
@@ -2005,7 +2005,6 @@ $(document).ready(function () {
                 // console.log(data);
                 var json = JSON.parse(data);
                 let fulltime1 = json.time1[0];
-                let fulltime2 = json.time2[0];
                 let _eAll;
                 if (label1[label1.length - 1] != fulltime1) {
 
@@ -2029,6 +2028,24 @@ $(document).ready(function () {
                         energy3.shift();
                         freq3.shift();
                         p_f3.shift();
+                        volt4.shift();
+                        curr4.shift();
+                        power4.shift();
+                        energy4.shift();
+                        freq4.shift();
+                        p_f4.shift();
+                        volt5.shift();
+                        curr5.shift();
+                        power5.shift();
+                        energy5.shift();
+                        freq5.shift();
+                        p_f5.shift();
+                        volt6.shift();
+                        curr6.shift();
+                        power6.shift();
+                        energy6.shift();
+                        freq6.shift();
+                        p_f6.shift();
                     }
                     // console.log(json.v1[0]);
                     if (json.v1[0] == '0.0') {
@@ -2085,59 +2102,6 @@ $(document).ready(function () {
                         _eAll += parseFloat(json.e3[0]) - min_e3;
                     }
 
-                    label1.push(json.time1[0]);
-
-                    $("#voltage1").html(json.v1[0]);
-                    $("#current1").html(json.i1[0]);
-                    $("#power1").html(json.p1[0]);
-                    $("#energy1").html((parseFloat(json.e1[0]) - min_e1).toFixed(3));
-                    $("#frequency1").html(json.f1[0]);
-                    $("#pf1").html(json.pf1[0]);
-
-                    $("#voltage2").html(json.v2[0]);
-                    $("#current2").html(json.i2[0]);
-                    $("#power2").html(json.p2[0]);
-                    $("#energy2").html((parseFloat(json.e2[0]) - min_e2).toFixed(3));
-                    $("#frequency2").html(json.f2[0]);
-                    $("#pf2").html(json.pf2[0]);
-
-                    $("#voltage3").html(json.v3[0]);
-                    $("#current3").html(json.i3[0]);
-                    $("#power3").html(json.p3[0]);
-                    $("#energy3").html((parseFloat(json.e3[0]) - min_e3).toFixed(3));
-                    $("#frequency3").html(json.f3[0]);
-                    $("#pf3").html(json.pf3[0]);
-
-                    $("#time").html(json.time1[0]);
-
-                    Chart_1.update();
-                    Chart_2.update();
-                    Chart_3.update();
-                }
-                if (label2[label2.length - 1] != fulltime2) {
-
-                    if (label2.length > 400) {
-                        label2.shift();
-                        volt4.shift();
-                        curr4.shift();
-                        power4.shift();
-                        energy4.shift();
-                        freq4.shift();
-                        p_f4.shift();
-                        volt5.shift();
-                        curr5.shift();
-                        power5.shift();
-                        energy5.shift();
-                        freq5.shift();
-                        p_f5.shift();
-                        volt6.shift();
-                        curr6.shift();
-                        power6.shift();
-                        energy6.shift();
-                        freq6.shift();
-                        p_f6.shift();
-                    }
-
                     if (json.v4[0] == '0.0') {
                         volt4.push(NaN);
                         curr4.push(NaN);
@@ -2192,7 +2156,28 @@ $(document).ready(function () {
                         _eAll += parseFloat(json.e6[0]) - min_e6;
                     }
 
-                    label2.push(json.time2[0]);
+                    label1.push(json.time1[0]);
+
+                    $("#voltage1").html(json.v1[0]);
+                    $("#current1").html(json.i1[0]);
+                    $("#power1").html(json.p1[0]);
+                    $("#energy1").html((parseFloat(json.e1[0]) - min_e1).toFixed(3));
+                    $("#frequency1").html(json.f1[0]);
+                    $("#pf1").html(json.pf1[0]);
+
+                    $("#voltage2").html(json.v2[0]);
+                    $("#current2").html(json.i2[0]);
+                    $("#power2").html(json.p2[0]);
+                    $("#energy2").html((parseFloat(json.e2[0]) - min_e2).toFixed(3));
+                    $("#frequency2").html(json.f2[0]);
+                    $("#pf2").html(json.pf2[0]);
+
+                    $("#voltage3").html(json.v3[0]);
+                    $("#current3").html(json.i3[0]);
+                    $("#power3").html(json.p3[0]);
+                    $("#energy3").html((parseFloat(json.e3[0]) - min_e3).toFixed(3));
+                    $("#frequency3").html(json.f3[0]);
+                    $("#pf3").html(json.pf3[0]);
 
                     $("#voltage4").html(json.v4[0]);
                     $("#current4").html(json.i4[0]);
@@ -2215,15 +2200,19 @@ $(document).ready(function () {
                     $("#frequency6").html(json.f6[0]);
                     $("#pf6").html(json.pf6[0]);
 
-                    $("#time").html(json.time2[0]);
+                    $("#time").html(json.time1[0]);
 
+                    Chart_1.update();
+                    Chart_2.update();
+                    Chart_3.update();
                     Chart_4.update();
                     Chart_5.update();
                     Chart_6.update();
                 }
+
                 if (json.v1[0] != '0.0' && json.v2[0] != '0.0' && json.v3[0] != '0.0' &&
                     json.v4[0] != '0.0' && json.v5[0] != '0.0' && json.v6[0] != '0.0' &&
-                    label1[label1.length - 1] != fulltime1 && label2[label2.length - 1] != fulltime2) {
+                    label1[label1.length - 1] != fulltime1) {
                     $("#energy_day").html("<span style='color:grey'><small>หน่วย(kWh): </small></span>" + _eAll.toFixed(1));
                     $("#bill_112").html("<span style='color:grey'><small>เป็นเงิน </small></span> ฿ " + (calc112Month(_eAll_month) / _eAll_month * _eAll).toFixed(1));
                 }
@@ -2250,32 +2239,8 @@ $(document).ready(function () {
         $(".month-view-page").hide();
         $(".day-view-page").hide();
 
-        if (label1.length || label2.length) $(".overlay").hide();
+        if (label1.length) $(".overlay").hide();
         else overlayNodata();
-
-        // Chart_1.data.datasets[0].data = [];
-        // Chart_1.data.datasets[1].data = [];
-        // Chart_1.data.datasets[2].data = [];
-        // Chart_1.data.datasets[3].data = [];
-        // Chart_1.data.datasets[4].data = [];
-        // Chart_1.data.datasets[5].data = [];
-        // Chart_1.update();
-
-        // Chart_1.data.datasets[0].data = volt1;
-        // Chart_1.data.datasets[0].label = 'Volt';
-        // Chart_1.data.datasets[1].data = curr1;
-        // Chart_1.data.datasets[1].label = 'Current';
-        // Chart_1.data.datasets[2].data = power1;
-        // Chart_1.data.datasets[2].label = 'Power';
-        // Chart_1.data.datasets[3].data = energy1;
-        // Chart_1.data.datasets[3].label = 'Energy';
-        // Chart_1.data.datasets[4].data = freq1;
-        // Chart_1.data.datasets[4].label = 'Frequency';
-        // Chart_1.data.datasets[5].data = p_f1;
-        // Chart_1.data.datasets[5].label = 'PF';
-        // Chart_1.data.labels = label;
-        // Chart_1.update();
-
 
     });
 
@@ -2320,7 +2285,7 @@ $(document).ready(function () {
                 }
             })
                 .done(function (response) {
-                    // console.log(response);
+                    console.log(response);
 
                     if (response == "nodata") {
                         overlayNodata();
@@ -2339,8 +2304,8 @@ $(document).ready(function () {
 
                     json.e1.reverse(); json.e2.reverse(); json.e3.reverse();
                     json.e4.reverse(); json.e5.reverse(); json.e6.reverse();
-                    let fulltime1 = json.time1; let fulltime2 = json.time2;
-                    fulltime1.reverse(); fulltime2.reverse();
+                    let fulltime1 = json.time1;
+                    fulltime1.reverse();
                     label1_day = [];
                     let energy_minute = [];
                     let bill_minute = [];
@@ -2506,11 +2471,8 @@ $(document).ready(function () {
                         // label_mouth.push(timesplit[2]);
 
                         sum_all_energy += parseFloat(json.e1[count]) + parseFloat(json.e2[count]) + parseFloat(json.e3[count]);
-                        // day_bill.push(parseFloat(json.e1[count]) + parseFloat(json.e2[count]) + parseFloat(json.e3[count]) + parseFloat(json.e4[count]) + parseFloat(json.e5[count]) + parseFloat(json.e6[count]));
-                    }
-
-                    for (var count = 0; count < json.time2.length; count++) {
                         sum_all_energy += parseFloat(json.e4[count]) + parseFloat(json.e5[count]) + parseFloat(json.e6[count])
+                        // day_bill.push(parseFloat(json.e1[count]) + parseFloat(json.e2[count]) + parseFloat(json.e3[count]) + parseFloat(json.e4[count]) + parseFloat(json.e5[count]) + parseFloat(json.e6[count]));
                     }
 
                     let value_per_energy = calc112Month(sum_all_energy) / sum_all_energy;
@@ -2759,9 +2721,9 @@ $(document).ready(function () {
         let data1 = [label1_timestamp, volt1_history, curr1_history, power1_history, energy1_history, freq1_history, p_f1_history];
         let data2 = [label1_timestamp, volt2_history, curr2_history, power2_history, energy2_history, freq2_history, p_f2_history];
         let data3 = [label1_timestamp, volt3_history, curr3_history, power3_history, energy3_history, freq3_history, p_f3_history];
-        let data4 = [label2_timestamp, volt4_history, curr4_history, power4_history, energy4_history, freq4_history, p_f4_history];
-        let data5 = [label2_timestamp, volt5_history, curr5_history, power5_history, energy5_history, freq5_history, p_f5_history];
-        let data6 = [label2_timestamp, volt6_history, curr6_history, power6_history, energy6_history, freq6_history, p_f6_history];
+        let data4 = [label1_timestamp, volt4_history, curr4_history, power4_history, energy4_history, freq4_history, p_f4_history];
+        let data5 = [label1_timestamp, volt5_history, curr5_history, power5_history, energy5_history, freq5_history, p_f5_history];
+        let data6 = [label1_timestamp, volt6_history, curr6_history, power6_history, energy6_history, freq6_history, p_f6_history];
 
         if (typeof uplot1 === 'undefined') {
 
@@ -3592,6 +3554,9 @@ $(document).ready(function () {
                 uplot1.setSize(getSize('areaChart1'));
                 uplot2.setSize(getSize('areaChart2'));
                 uplot3.setSize(getSize('areaChart3'));
+                uplot4.setSize(getSize('areaChart4'));
+                uplot5.setSize(getSize('areaChart5'));
+                uplot6.setSize(getSize('areaChart6'));
             });
         }
         else {
@@ -3648,7 +3613,7 @@ $(document).ready(function () {
                 json.v4.reverse(); json.i4.reverse(); json.p4.reverse(); json.e4.reverse(); json.f4.reverse(); json.pf4.reverse();
                 json.v5.reverse(); json.i5.reverse(); json.p5.reverse(); json.e5.reverse(); json.f5.reverse(); json.pf5.reverse();
                 json.v6.reverse(); json.i6.reverse(); json.p6.reverse(); json.e6.reverse(); json.f6.reverse(); json.pf6.reverse();
-                json.time1.reverse(); json.time2.reverse();
+                json.time1.reverse();
 
                 volt1_history = []; curr1_history = []; power1_history = []; energy1_history = []; freq1_history = []; p_f1_history = [];
                 volt2_history = []; curr2_history = []; power2_history = []; energy2_history = []; freq2_history = []; p_f2_history = [];
@@ -3685,8 +3650,7 @@ $(document).ready(function () {
                     energy3_history.push(parseFloat(json.e3[count]) - min_energy3_history);
                     freq3_history.push(parseFloat(json.f3[count]));
                     p_f3_history.push(parseFloat(json.pf3[count]));
-                }
-                for (var count = 0; count < json.time2.length; count++) {
+
                     volt4_history.push(parseFloat(json.v4[count]));
                     curr4_history.push(parseFloat(json.i4[count]));
                     power4_history.push(parseFloat(json.p4[count]));
@@ -3718,21 +3682,12 @@ $(document).ready(function () {
                     label1_timestamp.push(Date.parse(json.time1[count]) / 1000);
                 }
 
-                // for save as csv
-                label2_history = json.time2;
-
-                // convert string to time stamp for uplot
-                label2_timestamp = [];
-                for (var count = 0; count < json.time2.length; count++) {
-                    label2_timestamp.push(Date.parse(json.time2[count]) / 1000);
-                }
-
                 // console.log(power_history);
                 // console.log(label_timestamp);
 
                 $(".overlay").fadeOut(100);
 
-                if (label1_history.length != 0 || label2_history.length != 0) {
+                if (label1_history.length != 0) {
                     uplotupdate();
                 }
 
@@ -3772,7 +3727,7 @@ $(document).ready(function () {
     $("#csvdownload").click(function () {
         var data = [
             ["time", "voltage1", "current1", "power1", "energy1", "frequency1", "pf1", "voltage2", "current2", "power2", "energy2", "frequency2", "pf2", "voltage3", "current3", "power3", "energy3", "frequency3", "pf3",
-                "voltage4", "current4", "power4", "energy4", "frequency4", "pf4", "voltage5", "current5", "power5", "energy5", "frequency5", "pf5", "voltage6", "current6", "power6", "energy6", "frequency6", "pf6"]];
+                     "voltage4", "current4", "power4", "energy4", "frequency4", "pf4", "voltage5", "current5", "power5", "energy5", "frequency5", "pf5", "voltage6", "current6", "power6", "energy6", "frequency6", "pf6"]];
 
         // console.log(label_history.length);return;
 

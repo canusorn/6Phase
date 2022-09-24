@@ -22,27 +22,27 @@ try {
             } catch (Throwable $e) {
             }
         } else if (isset($_REQUEST['data']) && $_REQUEST['data'] == "min") {
-            $results_1 = Data_min::getLastMulti($esp_id1, $_REQUEST['point']);
+            $results_1 = Data_min::getLastMulti($esp_id, $_REQUEST['point']);
         } else if (isset($_REQUEST['data']) && $_REQUEST['data'] == "hr") {
-            $results_1 = Data_hr::getLastMulti($esp_id1, $_REQUEST['point']);
+            $results_1 = Data_hr::getLastMulti($esp_id, $_REQUEST['point']);
         } else { // get day data
         }
     } else if (isset($_REQUEST['range'])) {
         if (isset($_REQUEST['data']) && $_REQUEST['data'] == "sec") {
             if (isset($_REQUEST['range']['start'])) {
-                $results_1 = Data_sec::getRange($esp_id1, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
+                $results_1 = Data_sec::getRange($esp_id, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
             }
         } else if (isset($_REQUEST['data']) && $_REQUEST['data'] == "min") {
             if (isset($_REQUEST['range']['start'])) {
-                $results_1 = Data_min::getRange($esp_id1, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
+                $results_1 = Data_min::getRange($esp_id, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
             }
         } else if (isset($_REQUEST['data']) && $_REQUEST['data'] == "hr") {
             if (isset($_REQUEST['range']['start'])) {
-                $results_1 = Data_hr::getRange($esp_id1, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
+                $results_1 = Data_hr::getRange($esp_id, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
             }
         } else if (isset($_REQUEST['data']) && $_REQUEST['data'] == "day") {
             if (isset($_REQUEST['range']['start'])) {
-                $results_1 = Data_day::getRange($esp_id1, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
+                $results_1 = Data_day::getRange($esp_id, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
             }
         }
     }

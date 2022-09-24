@@ -60,7 +60,7 @@ PZEM004Tv30 pzems[NUM_PZEMS];
 #define STASSID "wifi_ssid"
 #define STAPSK "wifi_pass"
 #endif
-String server = "192.168.0.101";
+String server = "192.168.0.100";
 const char *ssid = STASSID;
 const char *password = STAPSK;
 
@@ -109,12 +109,12 @@ void loop() {
 
 
 // test data
-     voltage[i] = 200 + i;
-     current[i] = 1;
-     power[i] = voltage[i] * current[i] * 0.84;
-     energy[i] = 2;
-     frequency[i] = 50;
-     pf[i] = 0.84;
+    //  voltage[i] = 200 + i;
+    //  current[i] = 1;
+    //  power[i] = voltage[i] * current[i] * 0.84;
+    //  energy[i] = 2;
+    //  frequency[i] = 50;
+    //  pf[i] = 0.84;
 
 
     // Check if the data is valid
