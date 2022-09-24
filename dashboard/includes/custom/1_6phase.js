@@ -1612,7 +1612,6 @@ $(document).ready(function () {
             url: "ajax/custom/1_6phase.php",
             type: "post",
             data: {
-                skey: sk,
                 data: "sec",
                 point: 200
             },
@@ -1621,8 +1620,8 @@ $(document).ready(function () {
                     overlayNodata();
                     return;
                 }
-                // console.log(data);
-                try {
+                console.log(data);
+                // try {
                     var json = JSON.parse(data);
                     // console.log(json);
                     json.v1.reverse();
@@ -1668,7 +1667,6 @@ $(document).ready(function () {
                     json.pf6.reverse();
 
                     json.time1.reverse();
-                    json.time2.reverse();
 
                     volt1 = json.v1;
                     curr1 = json.i1;
@@ -1732,16 +1730,13 @@ $(document).ready(function () {
                     p_f2 = json.pf2;
                     freq3 = json.f3;
                     p_f3 = json.pf3;
-
                     freq4 = json.f4;
                     p_f4 = json.pf4;
                     freq5 = json.f5;
                     p_f5 = json.pf5;
                     freq6 = json.f6;
                     p_f6 = json.pf6;
-
                     label1 = json.time1;
-                    label2 = json.time2;
 
                     for (var count = 0; count < label1.length; count++) {
                         if (volt1[count] == '0.0') {
@@ -1768,9 +1763,6 @@ $(document).ready(function () {
                             freq3[count] = NaN;
                             p_f3[count] = NaN;
                         }
-                    }
-
-                    for (var count = 0; count < label2.length; count++) {
                         if (volt4[count] == '0.0') {
                             volt4[count] = NaN;
                             curr4[count] = NaN;
@@ -1807,9 +1799,7 @@ $(document).ready(function () {
                     let _e4 = parseFloat(json.e4[json.e4.length - 1]) - min_e4;
                     let _e5 = parseFloat(json.e5[json.e5.length - 1]) - min_e5;
                     let _e6 = parseFloat(json.e6[json.e6.length - 1]) - min_e6;
-                    eAll1 = _e1 + _e2 + _e3;
-                    eAll2 = _e4 + _e5 + _e6;
-                    let _eAll = eAll1 + eAll2;
+                    let _eAll = _e1 + _e2 + _e3+_e4 + _e5 + _e6;
                     _eAll_month = parseFloat(json.sum_e1) + parseFloat(json.sum_e2) + parseFloat(json.sum_e3) + parseFloat(json.sum_e4) + parseFloat(json.sum_e5) + parseFloat(json.sum_e6);
 
                     $("#voltage1").html(json.v1[json.v1.length - 1]);
@@ -1956,7 +1946,7 @@ $(document).ready(function () {
                     Chart_4.data.datasets[4].label = 'Frequency';
                     Chart_4.data.datasets[5].data = p_f4;
                     Chart_4.data.datasets[5].label = 'PF';
-                    Chart_4.data.labels = label2;
+                    Chart_4.data.labels = label1;
                     Chart_4.update();
 
                     Chart_5.data.datasets[0].data = volt5;
@@ -1971,7 +1961,7 @@ $(document).ready(function () {
                     Chart_5.data.datasets[4].label = 'Frequency';
                     Chart_5.data.datasets[5].data = p_f5;
                     Chart_5.data.datasets[5].label = 'PF';
-                    Chart_5.data.labels = label2;
+                    Chart_5.data.labels = label1;
                     Chart_5.update();
 
                     Chart_6.data.datasets[0].data = volt6;
@@ -1986,16 +1976,16 @@ $(document).ready(function () {
                     Chart_6.data.datasets[4].label = 'Frequency';
                     Chart_6.data.datasets[5].data = p_f6;
                     Chart_6.data.datasets[5].label = 'PF';
-                    Chart_6.data.labels = label2;
+                    Chart_6.data.labels = label1;
                     Chart_6.update();
 
                     $(".overlay").fadeOut(100);
                     setInterval(updateLastData, 5000); // 1000 = 1 second
-                }
-                catch (err) {
-                    console.log(err.message);
-                    overlayNodata();
-                }
+                // }
+                // catch (err) {
+                //     console.log(err.message);
+                //     overlayNodata();
+                // }
             },
             error: function () {
                 overlayNodata();
@@ -2008,7 +1998,6 @@ $(document).ready(function () {
             url: "ajax/custom/1_6phase.php",
             type: "post",
             data: {
-                skey: sk,
                 data: "sec",
                 point: 1
             },
@@ -2324,7 +2313,6 @@ $(document).ready(function () {
             $(".overlay").show();
 
             $.post('ajax/custom/1_6phase.php', {
-                skey: sk,
                 data: "min",
                 range: {
                     start: moment().startOf('days').format('YYYY-MM-DD HH:mm:ss'),
@@ -2483,7 +2471,6 @@ $(document).ready(function () {
             $(".overlay").show();
 
             $.post('ajax/custom/1_6phase.php', {
-                skey: sk,
                 data: "day",
                 range: {
                     start: moment().subtract(2, 'month').startOf('month').format('YYYY-MM-DD'),
@@ -3636,7 +3623,6 @@ $(document).ready(function () {
             url: "ajax/custom/1_6phase.php",
             type: "post",
             data: {
-                skey: sk,
                 data: datarange,
                 range: {
                     start: start.format('YYYY-MM-DD HH:mm'),

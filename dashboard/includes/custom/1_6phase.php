@@ -648,8 +648,7 @@
 
 <!-- script for real time chart -->
 <script>
-    var esp_id = <?= "4925120" ?>;
-    var sk = '<?= $_SESSION['skey']; ?>';
+    var esp_id = <?= ESP_ID ?>;
 </script>
 <script type="text/javascript" src="js/ebill.js?n=2"></script>
 <script type="text/javascript" src="includes/custom/1_6phase.js?n=2"></script>
