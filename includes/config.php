@@ -4,6 +4,8 @@
 define('USER','admin');
 define('PASS','esp32');
 
+define('ESP_ID',8717244);
+
 define('SECDATALIMIT',5);   //sec data limit in day
 define('MINDATALIMIT',30);   //minute data limit in day
 define('HRDATALIMIT',12);   //hr data limit in mounths

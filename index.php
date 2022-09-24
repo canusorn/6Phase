@@ -2,7 +2,7 @@
 
 require 'includes/init.php';
 
-if (isset($_SESSION['is_login'])) {
+if (isset($_SESSION['is_login']) && $_SESSION['is_login']) {
     header("Location: http://" . $_SERVER['HTTP_HOST'] . '/dashboard');
     exit;
 } else if (isset($_COOKIE["is_login"])) {
