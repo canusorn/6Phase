@@ -187,7 +187,7 @@ class Data_sec
     public static function delLast($esp_id)
     {
         $pdo = new \PDO("sqlite:" . $_SERVER['DOCUMENT_ROOT'] . "/db/$esp_id.db");
-        $sql = "DELETE FROM 'sec' WHERE time=(select max(time) from '{$esp_id}')";
+        $sql = "DELETE FROM 'sec' WHERE time=(select max(time) from 'sec')";
         $stmt = $pdo->prepare($sql);
         //$stmt->bindValue(':esp_id', $esp_id);
         if ($stmt->execute()) {
