@@ -625,7 +625,7 @@
                 </div>
 
 
-                <div class="card each-month-view-page">
+                <div class="card month-view-page">
                     <!-- Loading (remove the following to stop the loading)-->
                     <div class="overlay dark">
                         <i class="fas fa-3x fa-sync-alt"></i>
@@ -636,7 +636,7 @@
                         <h5 class="card-title">ค่าไฟแต่ละเดือน</h5>
                         <div class="card-tools">
                             <!-- <ul class="nav nav-pills ml-auto p-2"> -->
-                                <button type="button" id="eachmonth_csvdownload" class="btn btn-outline-secondary text-light btn-sm  each-month-view-page" title="download csv file">
+                                <button type="button" id="eachmonth_csvdownload" class="btn btn-outline-secondary text-light btn-sm  month-view-page" title="download csv file">
                                     <i class="fa-solid fa-download"></i>&nbsp;<span>CSV</span>
                                 </button>
                                 <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
