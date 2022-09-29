@@ -44,6 +44,10 @@ try {
             if (isset($_REQUEST['range']['start'])) {
                 $results_1 = Data_day::getRange($esp_id, $_REQUEST['range']['start'], $_REQUEST['range']['end']);
             }
+            try {
+                $last1year = Data_day::getLastCostom($esp_id, "1 years", "e1,e2,e3,e4,e5,e6,time");
+            } catch (Throwable $e) {
+            }
         }
     }
 } catch (Throwable $e) {
@@ -153,6 +157,35 @@ if (isset($results_1)) {
     }
     if (isset($last30day1)) {
         $data += ["sum_e1" => $last30day1[0]['SUM(e1)'], "sum_e2" => $last30day1[0]['SUM(e2)'], "sum_e3" => $last30day1[0]['SUM(e3)'], "sum_e4" => $last30day1[0]['SUM(e4)'], "sum_e5" => $last30day1[0]['SUM(e5)'], "sum_e6" => $last30day1[0]['SUM(e6)']];
+    }
+    if (isset($last1year)) {
+        $month = ["0", "0", "0"];
+        $energy = 0.0;
+        $month_energy = [];
+        $month_label = [];
+
+        foreach ($last1year as $thisday) {
+            $thismonth = explode("-", $thisday['time']);
+            if ($thismonth[1] != $month[1]) {
+                if ($energy) {
+                    $thisdate = $month[0] . "-" . $month[1];
+                    $month_energy[] =  $energy;
+                    $month_label[] = $thisdate;
+                }
+                $month = $thismonth;
+                $energy = 0;
+                $energy += $thisday['e1'] + $thisday['e2'] + $thisday['e3'] + $thisday['e4'] + $thisday['e5'] + $thisday['e6'];
+            } else {
+                $energy += $thisday['e1'] + $thisday['e2'] + $thisday['e3'] + $thisday['e4'] + $thisday['e5'] + $thisday['e6'];
+            }
+        }
+        if ($energy) {
+            $thisdate = $month[0] . "-" . $month[1];
+            $month_energy[] =  $energy;
+            $month_label[] = $thisdate;
+        }
+
+        $data += ["month_energy" => $month_energy, "month_label" => $month_label];
     }
     // var_dump(json_encode($data));
     echo json_encode($data);

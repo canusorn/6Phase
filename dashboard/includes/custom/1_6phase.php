@@ -623,6 +623,42 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div class="card each-month-view-page">
+                    <!-- Loading (remove the following to stop the loading)-->
+                    <div class="overlay dark">
+                        <i class="fas fa-3x fa-sync-alt"></i>
+                        <h3></h3>
+                    </div>
+                    <!-- end loading -->
+                    <div class="card-header">
+                        <h5 class="card-title">ค่าไฟแต่ละเดือน</h5>
+                        <div class="card-tools">
+                            <!-- <ul class="nav nav-pills ml-auto p-2"> -->
+                                <button type="button" id="eachmonth_csvdownload" class="btn btn-outline-secondary text-light btn-sm  each-month-view-page" title="download csv file">
+                                    <i class="fa-solid fa-download"></i>&nbsp;<span>CSV</span>
+                                </button>
+                                <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            <!-- </ul> -->
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-md-12 ">
+                                    <div class="chart">
+                                        <canvas id="Chart_month_bill" height="300" style="height: 300px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- toast  -->

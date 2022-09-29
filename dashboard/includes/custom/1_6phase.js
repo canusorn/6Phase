@@ -1596,6 +1596,91 @@ $(document).ready(function () {
             }
         });
 
+        Chart_month_bill = new Chart(
+            document.getElementById('Chart_month_bill'), {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'หน่วยที่ใช้',
+                    data: [],
+                    tension: 0.1,
+                    backgroundColor: 'rgba(60,141,188,0.5)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    fill: true,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    // pointRadius: 0.5,
+                }, {
+                    label: 'ค่าไฟ',
+                    data: [],
+                    tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
+                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
+                    pointColor: 'rgba(210, 214, 222, 1)',
+                    pointStrokeColor: '#c1c7d1',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                    yAxisID: 'yb',
+                    // pointRadius: 0.5,
+                }]
+            },
+            options: {
+                // Turn off animations and data parsing for performance
+                animation: false,
+                maintainAspectRatio: false,
+                responsive: true,
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                    },
+                    zoom: {
+                        zoom: {
+                            wheel: {
+                                enabled: true,
+                                speed: 0.5,
+                            },
+                            pinch: {
+                                enabled: true
+                            },
+                            mode: 'x',
+                        }, pan: {
+                            enabled: true,
+                            mode: 'x',
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "เดือน",
+                        }
+                    },
+                    y: {
+                        display: true,
+                        beginAtZero: false,
+                    },
+                },
+                spanGaps: true, // enable for all datasets
+                datasets: {
+                    line: {
+                        pointRadius: 0 // disable for all `'line'` datasets
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 0 // default to disabled in all datasets
+                    }
+                }
+            }
+        });
     }
 
     function overlayNodata() {
@@ -2285,7 +2370,7 @@ $(document).ready(function () {
                 }
             })
                 .done(function (response) {
-                    console.log(response);
+                    // console.log(response);
 
                     if (response == "nodata") {
                         overlayNodata();
@@ -2454,7 +2539,6 @@ $(document).ready(function () {
 
                     var json = JSON.parse(response);
 
-
                     energy_phase1 = json.e1; energy_phase2 = json.e2; energy_phase3 = json.e3;
                     energy_phase4 = json.e4; energy_phase5 = json.e5; energy_phase6 = json.e6;
                     energy_phase1.reverse(); energy_phase2.reverse(); energy_phase3.reverse();
@@ -2487,17 +2571,18 @@ $(document).ready(function () {
                     }
 
 
+
                     Chart_history.data.datasets[0].data = energy_phase1;
                     Chart_history.data.datasets[0].label = 'Phase1';
                     Chart_history.data.datasets[1].data = energy_phase2;
                     Chart_history.data.datasets[1].label = 'Phase2';
                     Chart_history.data.datasets[2].data = energy_phase3;
                     Chart_history.data.datasets[2].label = 'Phase3';
-                    Chart_history.data.datasets[3].data = energy_phase1;
+                    Chart_history.data.datasets[3].data = energy_phase4;
                     Chart_history.data.datasets[3].label = 'Phase4';
-                    Chart_history.data.datasets[4].data = energy_phase2;
+                    Chart_history.data.datasets[4].data = energy_phase5;
                     Chart_history.data.datasets[4].label = 'Phase5';
-                    Chart_history.data.datasets[5].data = energy_phase3;
+                    Chart_history.data.datasets[5].data = energy_phase6;
                     Chart_history.data.datasets[5].label = 'Phase6';
                     Chart_history.data.labels = label_mouth;
                     Chart_history.data.datasets[0].type = 'bar';
@@ -2514,6 +2599,29 @@ $(document).ready(function () {
                     Chart_day_bill.data.datasets[1].label = 'ค่าไฟ';
                     Chart_day_bill.data.labels = label_mouth;
                     Chart_day_bill.update();
+
+                    if (json.month_energy) {
+                        // console.log(json.month_energy);
+                        // console.log(json.month_label);
+
+                        json.month_energy.reverse(); json.month_label.reverse();
+
+                        var label_eachmonth = json.month_label;
+                        var month_use_energy = json.month_energy;
+
+                        var month_bill = [];
+                        for (var count = 0; count < label_eachmonth.length; count++) {
+                            month_bill.push(calc112Month(parseFloat(month_use_energy[count])));
+                        }
+
+                        Chart_month_bill.data.datasets[0].data = month_use_energy;
+                        Chart_month_bill.data.datasets[0].label = 'หน่วยที่ใช้';
+                        Chart_month_bill.data.datasets[1].data = month_bill;
+                        Chart_month_bill.data.datasets[1].label = 'ค่าไฟ';
+                        Chart_month_bill.data.labels = label_eachmonth;
+                        Chart_month_bill.update();
+
+                    }
 
                     $("#month_csvdownload").click(function () {
                         var data = [["date", "kWh", "bill"]];
@@ -2532,6 +2640,26 @@ $(document).ready(function () {
                         var link = document.createElement("a");
                         link.setAttribute("href", encodedUri);
                         link.setAttribute("download", label_mouth[0] + "_to_" + label_mouth[label_mouth.length - 1] + "_data.csv");
+                        document.body.appendChild(link);
+                        link.click();
+                    });
+
+                    $("#eachmonth_csvdownload").click(function () {
+                        var data = [["month", "kWh", "bill"]];
+
+                        // console.log(label_history.length);return;
+
+                        for (var count = 0; count < label_eachmonth.length; count++) {
+                            data.push([label_eachmonth[count], month_use_energy[count], month_bill[count]]);
+                        }
+
+                        let csvContent = "data:text/csv;charset=utf-8," +
+                            data.map(e => e.join(",")).join("\n");
+
+                        var encodedUri = encodeURI(csvContent);
+                        var link = document.createElement("a");
+                        link.setAttribute("href", encodedUri);
+                        link.setAttribute("download", label_eachmonth[0] + "_to_" + label_eachmonth[label_eachmonth.length - 1] + "_data.csv");
                         document.body.appendChild(link);
                         link.click();
                     });
@@ -3727,7 +3855,7 @@ $(document).ready(function () {
     $("#csvdownload").click(function () {
         var data = [
             ["time", "voltage1", "current1", "power1", "energy1", "frequency1", "pf1", "voltage2", "current2", "power2", "energy2", "frequency2", "pf2", "voltage3", "current3", "power3", "energy3", "frequency3", "pf3",
-                     "voltage4", "current4", "power4", "energy4", "frequency4", "pf4", "voltage5", "current5", "power5", "energy5", "frequency5", "pf5", "voltage6", "current6", "power6", "energy6", "frequency6", "pf6"]];
+                "voltage4", "current4", "power4", "energy4", "frequency4", "pf4", "voltage5", "current5", "power5", "energy5", "frequency5", "pf5", "voltage6", "current6", "power6", "energy6", "frequency6", "pf6"]];
 
         // console.log(label_history.length);return;
 
