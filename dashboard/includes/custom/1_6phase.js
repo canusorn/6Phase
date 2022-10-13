@@ -36,6 +36,187 @@ $(document).ready(function () {
     displayChart();
     getLastData();
 
+    if (label_mouth.length == 0) { // if empty array let get new
+
+        $(".overlay").show();
+
+        $.post('ajax/custom/1_6phase.php', {
+            data: "day",
+            range: {
+                start: moment().subtract(2, 'month').startOf('month').format('YYYY-MM-DD'),
+                end: moment().format('YYYY-MM-DD')
+            }
+        })
+            .done(function (response) {
+                // console.log(response);
+                if (response == "nodata") {
+                    $(".overlay").hide();
+                    return;
+                }
+
+                $(".overlay").fadeOut(100);
+                if (response == "") return;
+
+                var json = JSON.parse(response);
+
+                energy_phase1 = json.e1; energy_phase2 = json.e2; energy_phase3 = json.e3;
+                energy_phase4 = json.e4; energy_phase5 = json.e5; energy_phase6 = json.e6;
+                energy_phase1.reverse(); energy_phase2.reverse(); energy_phase3.reverse();
+                energy_phase4.reverse(); energy_phase5.reverse(); energy_phase6.reverse();
+
+                var sum_all_energy = 0;
+
+                var fulldate = json.time1;
+                fulldate.reverse();
+                label_mouth = [];
+                label_mouth = fulldate;
+                for (var count = 0; count < fulldate.length; count++) {
+                    // let timesplit = String(fulldate[count]).split("-");
+                    // label_mouth.push(timesplit[2]);
+
+                    sum_all_energy += parseFloat(json.e1[count]) + parseFloat(json.e2[count]) + parseFloat(json.e3[count]);
+                    sum_all_energy += parseFloat(json.e4[count]) + parseFloat(json.e5[count]) + parseFloat(json.e6[count])
+                    // day_bill.push(parseFloat(json.e1[count]) + parseFloat(json.e2[count]) + parseFloat(json.e3[count]) + parseFloat(json.e4[count]) + parseFloat(json.e5[count]) + parseFloat(json.e6[count]));
+                }
+
+                let value_per_energy = calc112Month(sum_all_energy) / sum_all_energy;
+                $('#month_energy').html(sum_all_energy.toFixed(1));
+                $('#month_bill').html("฿ " + calc112Month(sum_all_energy).toFixed(1));
+
+                var day_bill = [];
+                var day_use_energy = [];
+                for (var count = 0; count < fulldate.length; count++) {
+                    day_use_energy.push(parseFloat(json.e1[count]) + parseFloat(json.e2[count]) + parseFloat(json.e3[count]) + parseFloat(json.e4[count]) + parseFloat(json.e5[count]) + parseFloat(json.e6[count]));
+                    day_bill.push((parseFloat(json.e1[count]) + parseFloat(json.e2[count]) + parseFloat(json.e3[count]) + parseFloat(json.e4[count]) + parseFloat(json.e5[count]) + parseFloat(json.e6[count])) * value_per_energy);
+                }
+
+
+
+                Chart_history.data.datasets[0].data = energy_phase1;
+                Chart_history.data.datasets[0].label = 'Phase1';
+                Chart_history.data.datasets[1].data = energy_phase2;
+                Chart_history.data.datasets[1].label = 'Phase2';
+                Chart_history.data.datasets[2].data = energy_phase3;
+                Chart_history.data.datasets[2].label = 'Phase3';
+                Chart_history.data.datasets[3].data = energy_phase4;
+                Chart_history.data.datasets[3].label = 'Phase4';
+                Chart_history.data.datasets[4].data = energy_phase5;
+                Chart_history.data.datasets[4].label = 'Phase5';
+                Chart_history.data.datasets[5].data = energy_phase6;
+                Chart_history.data.datasets[5].label = 'Phase6';
+                Chart_history.data.labels = label_mouth;
+                Chart_history.data.datasets[0].type = 'bar';
+                Chart_history.data.datasets[1].type = 'bar';
+                Chart_history.data.datasets[2].type = 'bar';
+                Chart_history.data.datasets[3].type = 'bar';
+                Chart_history.data.datasets[4].type = 'bar';
+                Chart_history.data.datasets[5].type = 'bar';
+                Chart_history.update();
+
+                Chart_day_bill.data.datasets[0].data = day_use_energy;
+                Chart_day_bill.data.datasets[0].label = 'หน่วยที่ใช้';
+                Chart_day_bill.data.datasets[1].data = day_bill;
+                Chart_day_bill.data.datasets[1].label = 'ค่าไฟ';
+                Chart_day_bill.data.labels = label_mouth;
+                Chart_day_bill.update();
+
+                if (json.month_energy) {
+                    // console.log(json.month_energy);
+                    // console.log(json.month_label);
+
+                    json.month_energy.reverse(); json.month_label.reverse();
+
+                    var label_eachmonth = json.month_label;
+                    var month_use_energy = json.month_energy;
+
+                    var month_bill = [];
+                    for (var count = 0; count < label_eachmonth.length; count++) {
+                        month_bill.push(calc112Month(parseFloat(month_use_energy[count])));
+                    }
+
+                    Chart_month_bill.data.datasets[0].data = month_use_energy;
+                    Chart_month_bill.data.datasets[0].label = 'หน่วยที่ใช้';
+                    Chart_month_bill.data.datasets[1].data = month_bill;
+                    Chart_month_bill.data.datasets[1].label = 'ค่าไฟ';
+                    Chart_month_bill.data.labels = label_eachmonth;
+                    Chart_month_bill.update();
+
+                }
+
+                $("#month_csvdownload").click(function () {
+                    var data = [["date", "kWh", "bill"]];
+
+                    // console.log(label_history.length);return;
+
+                    for (var count = 0; count < label_mouth.length; count++) {
+                        data.push([label_mouth[count], day_use_energy[count], day_bill[count]]);
+                        // console.log([label_history[count], volt_history[count], curr_history[count], power_history[count], energy_history[count], freq_history[count], p_f_history[count]]);
+                    }
+
+                    let csvContent = "data:text/csv;charset=utf-8," +
+                        data.map(e => e.join(",")).join("\n");
+
+                    var encodedUri = encodeURI(csvContent);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", label_mouth[0] + "_to_" + label_mouth[label_mouth.length - 1] + "_data.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                });
+
+                $("#eachmonth_csvdownload").click(function () {
+                    var data = [["month", "kWh", "bill"]];
+
+                    // console.log(label_history.length);return;
+
+                    for (var count = 0; count < label_eachmonth.length; count++) {
+                        data.push([label_eachmonth[count], month_use_energy[count], month_bill[count]]);
+                    }
+
+                    let csvContent = "data:text/csv;charset=utf-8," +
+                        data.map(e => e.join(",")).join("\n");
+
+                    var encodedUri = encodeURI(csvContent);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", label_eachmonth[0] + "_to_" + label_eachmonth[label_eachmonth.length - 1] + "_data.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                });
+            })
+            .fail(function () {
+
+                $(".overlay").fadeOut(200);
+                $('.toast').removeClass('bg-success bg-warning').addClass('bg-danger');
+                $('#toast-body').text("โหลดข้อมูลไม่สำเร็จ โปรดลองใหม่อีกครั้ง");
+                $('.toast').toast('show');
+
+            });
+    } else {
+
+        Chart_history.data.datasets[0].data = energy_phase1;
+        Chart_history.data.datasets[0].label = 'Phase1';
+        Chart_history.data.datasets[1].data = energy_phase2;
+        Chart_history.data.datasets[1].label = 'Phase2';
+        Chart_history.data.datasets[2].data = energy_phase3;
+        Chart_history.data.datasets[2].label = 'Phase3';
+        Chart_history.data.datasets[3].data = energy_phase1;
+        Chart_history.data.datasets[3].label = 'Phase4';
+        Chart_history.data.datasets[4].data = energy_phase2;
+        Chart_history.data.datasets[4].label = 'Phase5';
+        Chart_history.data.datasets[5].data = energy_phase3;
+        Chart_history.data.datasets[5].label = 'Phase6';
+        Chart_history.data.labels = label_mouth;
+        Chart_history.data.datasets[0].type = 'bar';
+        Chart_history.data.datasets[1].type = 'bar';
+        Chart_history.data.datasets[2].type = 'bar';
+        Chart_history.data.datasets[3].type = 'bar';
+        Chart_history.data.datasets[4].type = 'bar';
+        Chart_history.data.datasets[5].type = 'bar';
+
+        Chart_history.update();
+    }
+
     $("#uplot").hide();
     $("#google_table").hide();
     $(".setting-page").hide();
@@ -1513,6 +1694,7 @@ $(document).ready(function () {
         Chart_day_bill = new Chart(
             document.getElementById('Chart_day_bill'), {
             type: 'bar',
+            plugins: [ChartDataLabels],
             data: {
                 labels: [],
                 datasets: [{
@@ -1568,6 +1750,11 @@ $(document).ready(function () {
                             enabled: true,
                             mode: 'x',
                         }
+                    },
+                    datalabels: {
+                        align: 'end',
+                        anchor: 'end',
+                        formatter: Math.round
                     }
                 },
                 scales: {
@@ -1599,6 +1786,7 @@ $(document).ready(function () {
         Chart_month_bill = new Chart(
             document.getElementById('Chart_month_bill'), {
             type: 'bar',
+            plugins: [ChartDataLabels],
             data: {
                 labels: [],
                 datasets: [{
@@ -1654,6 +1842,11 @@ $(document).ready(function () {
                             enabled: true,
                             mode: 'x',
                         }
+                    },
+                    datalabels: {
+                        align: 'end',
+                        anchor: 'end',
+                        formatter: Math.round
                     }
                 },
                 scales: {
@@ -2312,6 +2505,7 @@ $(document).ready(function () {
         $("#value").show();
         $("#io").show();
         $("#chart").show();
+        $(".overview-page").show();
         $("#uplot").hide();
         $("#google_table").hide();
         $(".setting-page").hide();
@@ -2339,6 +2533,7 @@ $(document).ready(function () {
         $("#google_table").hide();
         $(".setting-page").hide();
         $("#Charthistory").show();
+        $(".overview-page").hide();
         $("#Chart1").hide();
         $("#Chart2").hide();
         $("#Chart3").hide();
@@ -2498,7 +2693,7 @@ $(document).ready(function () {
     $("#mouth_view").click(function () {
 
         $("#chart").show();
-        $("#uplot").hide();
+        $("#uplot").hide(); $(".overview-page").hide();
         $("#google_table").hide();
         $(".setting-page").hide();
         $("#Charthistory").show();
@@ -2704,7 +2899,7 @@ $(document).ready(function () {
 
         $("#chart").show();
         $(".setting-page").hide();
-        $("#uplot").show();
+        $("#uplot").show(); $(".overview-page").hide();
         $("#google_table").show();
         $("#Chart1").hide();
         $("#Chart2").hide();

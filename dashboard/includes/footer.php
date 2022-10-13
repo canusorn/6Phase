@@ -26,7 +26,8 @@
       <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
       <script src="includes/dist/js//hammer.min.js"></script>
       <script src="includes/dist/js/chartjs-plugin-zoom.min.js"></script>
-
+      <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+      
       <!-- uPlot -->
       <script src="includes/plugins/uplot/uPlot.iife.min.js"></script>
 

@@ -574,7 +574,7 @@
                     </div>
                 </div>
 
-                <div class="card month-view-page">
+                <div class="card overview-page">
                     <!-- Loading (remove the following to stop the loading)-->
                     <div class="overlay dark">
                         <i class="fas fa-3x fa-sync-alt"></i>
@@ -625,7 +625,7 @@
                 </div>
 
 
-                <div class="card month-view-page">
+                <div class="card overview-page">
                     <!-- Loading (remove the following to stop the loading)-->
                     <div class="overlay dark">
                         <i class="fas fa-3x fa-sync-alt"></i>
