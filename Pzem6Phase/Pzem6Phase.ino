@@ -60,7 +60,9 @@ PZEM004Tv30 pzems[NUM_PZEMS];
 #define STASSID "wifi_ssid"
 #define STAPSK "wifi_pass"
 #endif
-String server = "192.168.0.100";
+String server0 = "192.168.0.100";
+String server1 = "192.168.0.101";
+String server2 = "192.168.0.102";
 const char *ssid = STASSID;
 const char *password = STAPSK;
 
@@ -108,7 +110,7 @@ void loop() {
     pf[i] = pzems[i].pf();
 
 
-// test data
+    // test data
     //  voltage[i] = 200 + i;
     //  current[i] = 1;
     //  power[i] = voltage[i] * current[i] * 0.84;
@@ -168,18 +170,18 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
       if (i)
         _json_update += ",";
 
-//      if (v[i] >= 60 && v[i] <= 260 && !isnan(v[i]))
-        _json_update += "\"v" + String(i + 1) + "\":" + String(v[i], 1);
-//      if (a[i] >= 0 && a[i] <= 100 && !isnan(a[i]))
-        _json_update += ",\"i" + String(i + 1) + "\":" + String(a[i], 3);
-//      if (p[i] >= 0 && p[i] <= 24000 && !isnan(p[i]))
-        _json_update += ",\"p" + String(i + 1) + "\":" + String(p[i], 1);
-//      if (e[i] >= 0 && e[i] <= 10000 && !isnan(e[i]))
-        _json_update += ",\"e" + String(i + 1) + "\":" + String(e[i], 3);
-//      if (f[i] >= 40 && f[i] <= 70 && !isnan(f[i]))
-        _json_update += ",\"f" + String(i + 1) + "\":" + String(f[i], 1);
-//      if (pf[i] >= 0 && pf[i] <= 1 && !isnan(pf[i]))
-        _json_update += ",\"pf" + String(i + 1) + "\":" + String(pf[i], 2);
+      //      if (v[i] >= 60 && v[i] <= 260 && !isnan(v[i]))
+      _json_update += "\"v" + String(i + 1) + "\":" + String(v[i], 1);
+      //      if (a[i] >= 0 && a[i] <= 100 && !isnan(a[i]))
+      _json_update += ",\"i" + String(i + 1) + "\":" + String(a[i], 3);
+      //      if (p[i] >= 0 && p[i] <= 24000 && !isnan(p[i]))
+      _json_update += ",\"p" + String(i + 1) + "\":" + String(p[i], 1);
+      //      if (e[i] >= 0 && e[i] <= 10000 && !isnan(e[i]))
+      _json_update += ",\"e" + String(i + 1) + "\":" + String(e[i], 3);
+      //      if (f[i] >= 40 && f[i] <= 70 && !isnan(f[i]))
+      _json_update += ",\"f" + String(i + 1) + "\":" + String(f[i], 1);
+      //      if (pf[i] >= 0 && pf[i] <= 1 && !isnan(pf[i]))
+      _json_update += ",\"pf" + String(i + 1) + "\":" + String(pf[i], 2);
     }
 
     _json_update += "}}";
@@ -188,29 +190,42 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
 
     HTTPClient http;
 
-    Serial.print("[HTTP] begin...\n");
-    http.begin("http://" + server + "/api/update.php"); // HTTP
+    for (int s = 0; s < 3; s++) {
 
-    Serial.print("[HTTP] POST...\n");
-    // start connection and send HTTP header
-    int httpCode = http.POST(_json_update);
-
-    // httpCode will be negative on error
-    if (httpCode > 0)
-    {
-      // HTTP header has been send and Server response header has been handled
-      Serial.printf("[HTTP] POST... code: %d\n", httpCode);
-
-      // file found at server
-      if (httpCode == HTTP_CODE_OK)
-      {
-        String payload = http.getString();
-        Serial.println(payload);
+      String server;
+      if (s == 0) {
+        server = server0;
+      } else if (s == 1) {
+        server = server1;
+      } else if (s == 2) {
+        server = server2;
       }
-    }
-    else
-    {
-      Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
+
+      Serial.print("[HTTP] begin...\n");
+      http.begin("http://" + server + "/api/update.php"); // HTTP
+
+      Serial.print("[HTTP] POST...\n");
+      // start connection and send HTTP header
+      int httpCode = http.POST(_json_update);
+
+      // httpCode will be negative on error
+      if (httpCode > 0)
+      {
+        // HTTP header has been send and Server response header has been handled
+        Serial.printf("[HTTP] POST... code: %d\n", httpCode);
+
+        // file found at server
+        if (httpCode == HTTP_CODE_OK)
+        {
+          String payload = http.getString();
+          Serial.println(payload);
+        }
+      }
+      else
+      {
+        Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
+      }
+
     }
 
     http.end();
