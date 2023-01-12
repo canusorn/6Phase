@@ -41,7 +41,6 @@
 #include <HTTPClient.h>
 #include <PZEM004Tv30.h>
 
-
 #if !defined(PZEM_RX_PIN) && !defined(PZEM_TX_PIN)
 #define PZEM_RX_PIN 16
 #define PZEM_TX_PIN 17
@@ -65,8 +64,10 @@ String server1 = "192.168.0.101";
 String server2 = "192.168.0.102";
 const char *ssid = STASSID;
 const char *password = STAPSK;
+int notConnected = 0;
 
-void setup() {
+void setup()
+{
   /* Debugging serial */
   Serial.begin(115200);
   Serial.println();
@@ -74,7 +75,8 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
   }
@@ -87,19 +89,18 @@ void setup() {
   }
 }
 
-
-
-void loop() {
+void loop()
+{
   float voltage[6], current[6], power[6], energy[6], frequency[6], pf[6];
   // Print out the measured values from each PZEM module
-  for (int i = 0; i < NUM_PZEMS; i++) {
+  for (int i = 0; i < NUM_PZEMS; i++)
+  {
     // Print the Address of the PZEM
     Serial.print("PZEM ");
     Serial.print(i);
     Serial.print(" - Address:");
     Serial.println(pzems[i].getAddress(), HEX);
     Serial.println("===================");
-
 
     // Read the data from the sensor
     voltage[i] = pzems[i].voltage();
@@ -109,7 +110,6 @@ void loop() {
     frequency[i] = pzems[i].frequency();
     pf[i] = pzems[i].pf();
 
-
     // test data
     //  voltage[i] = 200 + i;
     //  current[i] = 1;
@@ -118,29 +118,51 @@ void loop() {
     //  frequency[i] = 50;
     //  pf[i] = 0.84;
 
-
     // Check if the data is valid
-    if (isnan(voltage[i])) {
+    if (isnan(voltage[i]))
+    {
       Serial.println("Error reading voltage");
-    } else if (isnan(current[i])) {
+    }
+    else if (isnan(current[i]))
+    {
       Serial.println("Error reading current");
-    } else if (isnan(power[i])) {
+    }
+    else if (isnan(power[i]))
+    {
       Serial.println("Error reading power");
-    } else if (isnan(energy[i])) {
+    }
+    else if (isnan(energy[i]))
+    {
       Serial.println("Error reading energy");
-    } else if (isnan(frequency[i])) {
+    }
+    else if (isnan(frequency[i]))
+    {
       Serial.println("Error reading frequency");
-    } else if (isnan(pf[i])) {
+    }
+    else if (isnan(pf[i]))
+    {
       Serial.println("Error reading power factor");
-    } else {
+    }
+    else
+    {
       // Print the values to the Serial console
-      Serial.print("Voltage: ");      Serial.print(voltage[i]);      Serial.println("V");
-      Serial.print("Current: ");      Serial.print(current[i]);      Serial.println("A");
-      Serial.print("Power: ");        Serial.print(power[i]);        Serial.println("W");
-      Serial.print("Energy: ");       Serial.print(energy[i], 3);     Serial.println("kWh");
-      Serial.print("Frequency: ");    Serial.print(frequency[i], 1); Serial.println("Hz");
-      Serial.print("PF: ");           Serial.println(pf[i]);
-
+      Serial.print("Voltage: ");
+      Serial.print(voltage[i]);
+      Serial.println("V");
+      Serial.print("Current: ");
+      Serial.print(current[i]);
+      Serial.println("A");
+      Serial.print("Power: ");
+      Serial.print(power[i]);
+      Serial.println("W");
+      Serial.print("Energy: ");
+      Serial.print(energy[i], 3);
+      Serial.println("kWh");
+      Serial.print("Frequency: ");
+      Serial.print(frequency[i], 1);
+      Serial.println("Hz");
+      Serial.print("PF: ");
+      Serial.println(pf[i]);
     }
 
     Serial.println("-------------------");
@@ -149,8 +171,12 @@ void loop() {
   postData(voltage, current, power, energy, frequency, pf);
   Serial.println();
   delay(2000);
-}
 
+  if (notConnected >= 30)
+  {
+    ESP.restart();
+  }
+}
 
 void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float pf[6])
 {
@@ -190,14 +216,20 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
 
     HTTPClient http;
 
-    for (int s = 0; s < 3; s++) {
+    for (int s = 0; s < 3; s++)
+    {
 
       String server;
-      if (s == 0) {
+      if (s == 0)
+      {
         server = server0;
-      } else if (s == 1) {
+      }
+      else if (s == 1)
+      {
         server = server1;
-      } else if (s == 2) {
+      }
+      else if (s == 2)
+      {
         server = server2;
       }
 
@@ -219,15 +251,27 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
         {
           String payload = http.getString();
           Serial.println(payload);
+          notConnected = 0;
+        }
+        else
+        {
+          notConnected++;
         }
       }
       else
       {
         Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
       }
-
     }
 
     http.end();
+  }
+  else
+  {
+    Serial.println("Reconnecting to WiFi...");
+    WiFi.disconnect();
+    WiFi.reconnect();
+    notConnected+=10;
+    delay(10000);
   }
 }
