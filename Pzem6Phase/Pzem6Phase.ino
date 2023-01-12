@@ -271,7 +271,7 @@ void postData(float v[6], float a[6], float p[6], float e[6], float f[6], float 
     Serial.println("Reconnecting to WiFi...");
     WiFi.disconnect();
     WiFi.reconnect();
-    notConnected+=10;
+    notConnected+=5;
     delay(10000);
   }
 }
