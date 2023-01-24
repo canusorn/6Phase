@@ -8,6 +8,10 @@ $(document).ready(function () {
         volt5 = [], curr5 = [], power5 = [], energy5 = [], freq5 = [], p_f5 = [],
         volt6 = [], curr6 = [], power6 = [], energy6 = [], freq6 = [], p_f6 = [],
         label1 = [];
+
+    var today_min_power = [], today_min_label1 = [];
+    var yesterday_min_power = [], yesterday_min_label1 = [];
+
     var min_e1, min_e2, min_e3, min_e4, min_e5, min_e6;
     var _eAll_month;
     var kwh_per_energy = 4.2;
@@ -32,7 +36,7 @@ $(document).ready(function () {
         uplot1, uplot2, uplot3, uplot4, uplot5, uplot6;
 
 
-    var Chart_1, Chart_2, Chart_3, Chart_4, Chart_5, Chart_6, Chart_history;
+    var Chart_history;
     displayChart();
     getLastData();
 
@@ -194,11 +198,11 @@ $(document).ready(function () {
 
     // if (label_mouth.length == 0) { // if empty array let get new
 
-        // $(".overlay").show();
+    // $(".overlay").show();
 
-        ChartMonthBillCal();
+    ChartMonthBillCal();
 
-        setInterval(ChartMonthBillCal, 18000); // 1000 = 1 second
+    setInterval(ChartMonthBillCal, 18000); // 1000 = 1 second
 
     // } else {
 
@@ -235,6 +239,7 @@ $(document).ready(function () {
     $("#ota-form").hide();
     $(".month-view-page").hide();
     $(".day-view-page").hide();
+    $("#chart").hide();
 
     // bootstrap tooltips
     $(function () {
@@ -261,1200 +266,6 @@ $(document).ready(function () {
             }
             ci.update();
         };
-
-        Chart_1 = new Chart(
-            document.getElementById('Chart_1'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Voltage',
-                    data: [],
-                    yAxisID: 'yv',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Current',
-                    data: [],
-                    yAxisID: 'yi',
-                    tension: 0.1,
-                    backgroundColor: '#f05d2380',
-                    borderColor: '#f05d23',
-                    fill: true,
-                    pointColor: '#f05d23',
-                    pointStrokeColor: '#f05d23',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#f05d23',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Power',
-                    data: [],
-                    yAxisID: 'yp',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(60,141,188,0.5)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    pointRadius: 0.5,
-                }, {
-                    label: 'Energy',
-                    data: [],
-                    yAxisID: 'ye',
-                    tension: 0.1,
-                    backgroundColor: '#b643cd80',
-                    borderColor: '#b643cd',
-                    fill: true,
-                    pointColor: '#b643cd',
-                    pointStrokeColor: '#b643cd',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#b643cd',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Frequency',
-                    data: [],
-                    yAxisID: 'yf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(153,153,0,0.5)',
-                    borderColor: 'rgba(153,153,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(153,153,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(153,153,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'PF',
-                    data: [],
-                    yAxisID: 'ypf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(0,141,0,0.5)',
-                    borderColor: 'rgba(0,141,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(0,141,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(0,141,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }]
-            },
-            options: {
-                // Turn off animations and data parsing for performance
-                animation: false,
-                maintainAspectRatio: false,
-                responsive: true,
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Phase1'
-                    },
-                    legend: {
-                        display: true,
-                        onClick: axiscontrol
-                    },
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'minute'
-                        },
-                        title: {
-                            display: true,
-                            text: "เวลา",
-                        }
-                        // ticks: {
-                        //     source: 'auto',
-                        //     autoSkip: true,
-                        // },
-                    },
-                    yp: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Power",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    },
-                    yv: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Volt",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    }
-                    ,
-                    yi: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Current",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ye: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Energy",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    yf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Frequency",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ypf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "PF",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    }
-                }
-            }
-        });
-
-        Chart_2 = new Chart(
-            document.getElementById('Chart_2'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Voltage',
-                    data: [],
-                    yAxisID: 'yv',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Current',
-                    data: [],
-                    yAxisID: 'yi',
-                    tension: 0.1,
-                    backgroundColor: '#f05d2380',
-                    borderColor: '#f05d23',
-                    fill: true,
-                    pointColor: '#f05d23',
-                    pointStrokeColor: '#f05d23',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#f05d23',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Power',
-                    data: [],
-                    yAxisID: 'yp',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(60,141,188,0.5)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    pointRadius: 0.5,
-                }, {
-                    label: 'Energy',
-                    data: [],
-                    yAxisID: 'ye',
-                    tension: 0.1,
-                    backgroundColor: '#b643cd80',
-                    borderColor: '#b643cd',
-                    fill: true,
-                    pointColor: '#b643cd',
-                    pointStrokeColor: '#b643cd',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#b643cd',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Frequency',
-                    data: [],
-                    yAxisID: 'yf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(153,153,0,0.5)',
-                    borderColor: 'rgba(153,153,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(153,153,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(153,153,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'PF',
-                    data: [],
-                    yAxisID: 'ypf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(0,141,0,0.5)',
-                    borderColor: 'rgba(0,141,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(0,141,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(0,141,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }]
-            },
-            options: {
-                // Turn off animations and data parsing for performance
-                animation: false,
-                maintainAspectRatio: false,
-                responsive: true,
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Phase2'
-                    },
-                    legend: {
-                        display: true,
-                        onClick: axiscontrol
-                    },
-                    // zoom: {
-                    //     zoom: {
-                    //         wheel: {
-                    //             enabled: true,
-                    //         },
-                    //         pinch: {
-                    //             enabled: true
-                    //         },
-                    //         // drag: {
-                    //         //     enabled: true
-                    //         // },
-                    //         mode: 'x',
-                    //     }, pan: {
-                    //         enabled: true,
-                    //         mode: 'x',
-                    //     },
-                    //     limits: {
-                    //         x: { min: 'original', max: 'original' },
-                    //     }
-                    // }
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'minute'
-                        },
-                        title: {
-                            display: true,
-                            text: "เวลา",
-                        }
-                        // ticks: {
-                        //     source: 'auto',
-                        //     autoSkip: true,
-                        // },
-                    },
-                    yp: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Power",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    },
-                    yv: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Volt",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    }
-                    ,
-                    yi: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Current",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ye: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Energy",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    yf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Frequency",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ypf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "PF",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    }
-                }
-            }
-        });
-
-        Chart_3 = new Chart(
-            document.getElementById('Chart_3'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Voltage',
-                    data: [],
-                    yAxisID: 'yv',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Current',
-                    data: [],
-                    yAxisID: 'yi',
-                    tension: 0.1,
-                    backgroundColor: '#f05d2380',
-                    borderColor: '#f05d23',
-                    fill: true,
-                    pointColor: '#f05d23',
-                    pointStrokeColor: '#f05d23',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#f05d23',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Power',
-                    data: [],
-                    yAxisID: 'yp',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(60,141,188,0.5)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    pointRadius: 0.5,
-                }, {
-                    label: 'Energy',
-                    data: [],
-                    yAxisID: 'ye',
-                    tension: 0.1,
-                    backgroundColor: '#b643cd80',
-                    borderColor: '#b643cd',
-                    fill: true,
-                    pointColor: '#b643cd',
-                    pointStrokeColor: '#b643cd',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#b643cd',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Frequency',
-                    data: [],
-                    yAxisID: 'yf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(153,153,0,0.5)',
-                    borderColor: 'rgba(153,153,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(153,153,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(153,153,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'PF',
-                    data: [],
-                    yAxisID: 'ypf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(0,141,0,0.5)',
-                    borderColor: 'rgba(0,141,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(0,141,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(0,141,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }]
-            },
-            options: {
-                // Turn off animations and data parsing for performance
-                animation: false,
-                maintainAspectRatio: false,
-                responsive: true,
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Phase3'
-                    },
-                    legend: {
-                        display: true,
-                        onClick: axiscontrol
-                    },
-                    // zoom: {
-                    //     zoom: {
-                    //         wheel: {
-                    //             enabled: true,
-                    //         },
-                    //         pinch: {
-                    //             enabled: true
-                    //         },
-                    //         // drag: {
-                    //         //     enabled: true
-                    //         // },
-                    //         mode: 'x',
-                    //     }, pan: {
-                    //         enabled: true,
-                    //         mode: 'x',
-                    //     },
-                    //     limits: {
-                    //         x: { min: 'original', max: 'original' },
-                    //     }
-                    // }
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'minute'
-                        },
-                        title: {
-                            display: true,
-                            text: "เวลา",
-                        }
-                        // ticks: {
-                        //     source: 'auto',
-                        //     autoSkip: true,
-                        // },
-                    },
-                    yp: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Power",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    },
-                    yv: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Volt",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    }
-                    ,
-                    yi: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Current",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ye: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Energy",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    yf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Frequency",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ypf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "PF",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    }
-                }
-            }
-        });
-
-        Chart_4 = new Chart(
-            document.getElementById('Chart_4'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Voltage',
-                    data: [],
-                    yAxisID: 'yv',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Current',
-                    data: [],
-                    yAxisID: 'yi',
-                    tension: 0.1,
-                    backgroundColor: '#f05d2380',
-                    borderColor: '#f05d23',
-                    fill: true,
-                    pointColor: '#f05d23',
-                    pointStrokeColor: '#f05d23',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#f05d23',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Power',
-                    data: [],
-                    yAxisID: 'yp',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(60,141,188,0.5)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    pointRadius: 0.5,
-                }, {
-                    label: 'Energy',
-                    data: [],
-                    yAxisID: 'ye',
-                    tension: 0.1,
-                    backgroundColor: '#b643cd80',
-                    borderColor: '#b643cd',
-                    fill: true,
-                    pointColor: '#b643cd',
-                    pointStrokeColor: '#b643cd',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#b643cd',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Frequency',
-                    data: [],
-                    yAxisID: 'yf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(153,153,0,0.5)',
-                    borderColor: 'rgba(153,153,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(153,153,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(153,153,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'PF',
-                    data: [],
-                    yAxisID: 'ypf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(0,141,0,0.5)',
-                    borderColor: 'rgba(0,141,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(0,141,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(0,141,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }]
-            },
-            options: {
-                // Turn off animations and data parsing for performance
-                animation: false,
-                maintainAspectRatio: false,
-                responsive: true,
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Phase4'
-                    },
-                    legend: {
-                        display: true,
-                        onClick: axiscontrol
-                    },
-                    // zoom: {
-                    //     zoom: {
-                    //         wheel: {
-                    //             enabled: true,
-                    //         },
-                    //         pinch: {
-                    //             enabled: true
-                    //         },
-                    //         // drag: {
-                    //         //     enabled: true
-                    //         // },
-                    //         mode: 'x',
-                    //     }, pan: {
-                    //         enabled: true,
-                    //         mode: 'x',
-                    //     },
-                    //     limits: {
-                    //         x: { min: 'original', max: 'original' },
-                    //     }
-                    // }
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'minute'
-                        },
-                        title: {
-                            display: true,
-                            text: "เวลา",
-                        }
-                        // ticks: {
-                        //     source: 'auto',
-                        //     autoSkip: true,
-                        // },
-                    },
-                    yp: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Power",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    },
-                    yv: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Volt",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    }
-                    ,
-                    yi: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Current",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ye: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Energy",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    yf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Frequency",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ypf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "PF",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    }
-                }
-            }
-        });
-
-        Chart_5 = new Chart(
-            document.getElementById('Chart_5'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Voltage',
-                    data: [],
-                    yAxisID: 'yv',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Current',
-                    data: [],
-                    yAxisID: 'yi',
-                    tension: 0.1,
-                    backgroundColor: '#f05d2380',
-                    borderColor: '#f05d23',
-                    fill: true,
-                    pointColor: '#f05d23',
-                    pointStrokeColor: '#f05d23',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#f05d23',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Power',
-                    data: [],
-                    yAxisID: 'yp',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(60,141,188,0.5)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    pointRadius: 0.5,
-                }, {
-                    label: 'Energy',
-                    data: [],
-                    yAxisID: 'ye',
-                    tension: 0.1,
-                    backgroundColor: '#b643cd80',
-                    borderColor: '#b643cd',
-                    fill: true,
-                    pointColor: '#b643cd',
-                    pointStrokeColor: '#b643cd',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#b643cd',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Frequency',
-                    data: [],
-                    yAxisID: 'yf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(153,153,0,0.5)',
-                    borderColor: 'rgba(153,153,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(153,153,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(153,153,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'PF',
-                    data: [],
-                    yAxisID: 'ypf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(0,141,0,0.5)',
-                    borderColor: 'rgba(0,141,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(0,141,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(0,141,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }]
-            },
-            options: {
-                // Turn off animations and data parsing for performance
-                animation: false,
-                maintainAspectRatio: false,
-                responsive: true,
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Phase5'
-                    },
-                    legend: {
-                        display: true,
-                        onClick: axiscontrol
-                    },
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'minute'
-                        },
-                        title: {
-                            display: true,
-                            text: "เวลา",
-                        }
-                        // ticks: {
-                        //     source: 'auto',
-                        //     autoSkip: true,
-                        // },
-                    },
-                    yp: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Power",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    },
-                    yv: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Volt",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    }
-                    ,
-                    yi: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Current",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ye: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Energy",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    yf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Frequency",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ypf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "PF",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    }
-                }
-            }
-        });
-
-        Chart_6 = new Chart(
-            document.getElementById('Chart_6'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Voltage',
-                    data: [],
-                    yAxisID: 'yv',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Current',
-                    data: [],
-                    yAxisID: 'yi',
-                    tension: 0.1,
-                    backgroundColor: '#f05d2380',
-                    borderColor: '#f05d23',
-                    fill: true,
-                    pointColor: '#f05d23',
-                    pointStrokeColor: '#f05d23',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#f05d23',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Power',
-                    data: [],
-                    yAxisID: 'yp',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(60,141,188,0.5)',
-                    borderColor: 'rgba(60,141,188,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(60,141,188,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(60,141,188,1)',
-                    pointRadius: 0.5,
-                }, {
-                    label: 'Energy',
-                    data: [],
-                    yAxisID: 'ye',
-                    tension: 0.1,
-                    backgroundColor: '#b643cd80',
-                    borderColor: '#b643cd',
-                    fill: true,
-                    pointColor: '#b643cd',
-                    pointStrokeColor: '#b643cd',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: '#b643cd',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'Frequency',
-                    data: [],
-                    yAxisID: 'yf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(153,153,0,0.5)',
-                    borderColor: 'rgba(153,153,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(153,153,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(153,153,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }, {
-                    label: 'PF',
-                    data: [],
-                    yAxisID: 'ypf',
-                    tension: 0.1,
-                    backgroundColor: 'rgba(0,141,0,0.5)',
-                    borderColor: 'rgba(0,141,0,0.8)',
-                    fill: true,
-                    pointColor: '#3b8bba',
-                    pointStrokeColor: 'rgba(0,141,0,1)',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(0,141,0,1)',
-                    pointRadius: 0.5,
-                    hidden: true
-                }]
-            },
-            options: {
-                // Turn off animations and data parsing for performance
-                animation: false,
-                maintainAspectRatio: false,
-                responsive: true,
-                interaction: {
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Phase6'
-                    },
-                    legend: {
-                        display: true,
-                        onClick: axiscontrol
-                    },
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'minute'
-                        },
-                        title: {
-                            display: true,
-                            text: "เวลา",
-                        }
-                        // ticks: {
-                        //     source: 'auto',
-                        //     autoSkip: true,
-                        // },
-                    },
-                    yp: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Power",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    },
-                    yv: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Volt",
-                        },
-
-                        type: 'linear',
-                        position: 'left',
-                    }
-                    ,
-                    yi: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Current",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ye: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Energy",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    yf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "Frequency",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    },
-                    ypf: {
-                        display: true,
-                        title: {
-                            display: true,
-                            text: "PF",
-                        },
-                        type: 'linear',
-                        position: 'right',
-
-                    }
-                }
-            }
-        });
 
         Chart_history = new Chart(
             document.getElementById('Chart_history'), {
@@ -1699,6 +510,142 @@ $(document).ready(function () {
             }
         });
 
+        daily_load_curve = new Chart(
+            document.getElementById('daily_load_curve'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'วันก่อนหน้า',
+                    data: [],
+                    tension: 0.1,
+                    backgroundColor: 'rgba(255,255,0,0.1)',
+                    borderColor: 'rgba(255,255,0,0.9)',
+                    fill: true,
+                    pointColor: 'rgba(255,255,0,0.9)',
+                    pointStrokeColor: 'rgba(255,255,0,0.9)',
+                    pointHighlightFill: '#ff0',
+                    pointHighlightStroke: 'rgba(255,255,0,1)',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }]
+            },
+            options: {
+                // Turn off animations and data parsing for performance
+                // animation: false,
+                maintainAspectRatio: false,
+                responsive: true,
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                    },
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'hour'
+                        },
+                        title: {
+                            display: true,
+                            text: "Time of Day(h)",
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: "Power(W)",
+                        },
+                    }
+                },
+                spanGaps: true, // enable for all datasets
+                datasets: {
+                    line: {
+                        pointRadius: 0 // disable for all `'line'` datasets
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 0 // default to disabled in all datasets
+                    }
+                }
+            }
+        });
+
+        daily_load_curve_2 = new Chart(
+            document.getElementById('daily_load_curve_2'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'วันล่าสุด',
+                    data: [],
+                    tension: 0.1,
+                    backgroundColor: 'rgba(255,165,0,0.1)',
+                    borderColor: 'rgba(255,165,0,0.8)',
+                    fill: true,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(255,165,0,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(255,165,0,1)',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }]
+            },
+            options: {
+                // Turn off animations and data parsing for performance
+                // animation: false,
+                maintainAspectRatio: false,
+                responsive: true,
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                    },
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'hour'
+                        },
+                        title: {
+                            display: true,
+                            text: "Time of Day(h)",
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: "Power(W)",
+                        },
+                    }
+                },
+                spanGaps: true, // enable for all datasets
+                datasets: {
+                    line: {
+                        pointRadius: 0 // disable for all `'line'` datasets
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 0 // default to disabled in all datasets
+                    }
+                }
+            }
+        });
+
         Chart_day_bill = new Chart(
             document.getElementById('Chart_day_bill'), {
             type: 'bar',
@@ -1893,13 +840,12 @@ $(document).ready(function () {
     //second data
     function getLastData() {
         $(".overlay").show();
-
         $.ajax({
             url: "ajax/custom/1_6phase.php",
             type: "post",
             data: {
                 data: "sec",
-                point: 200
+                point: 1
             },
             success: function (data) {
                 if (data == "nodata") {
@@ -1954,25 +900,6 @@ $(document).ready(function () {
 
                     json.time1.reverse();
 
-                    volt1 = json.v1;
-                    curr1 = json.i1;
-                    power1 = json.p1;
-                    volt2 = json.v2;
-                    curr2 = json.i2;
-                    power2 = json.p2;
-                    volt3 = json.v3;
-                    curr3 = json.i3;
-                    power3 = json.p3;
-                    volt4 = json.v4;
-                    curr4 = json.i4;
-                    power4 = json.p4;
-                    volt5 = json.v5;
-                    curr5 = json.i5;
-                    power5 = json.p5;
-                    volt6 = json.v6;
-                    curr6 = json.i6;
-                    power6 = json.p6;
-
                     min_e1 = parseFloat(json.min_e1).toFixed(3);
                     if (isNaN(min_e1)) { min_e1 = parseFloat(json.e1[0]); }
 
@@ -2009,21 +936,6 @@ $(document).ready(function () {
                     for (var count = 0; count < json.e6.length; count++) {
                         energy6.push(parseFloat(json.e6[count]) - min_e6);
                     }
-
-                    freq1 = json.f1;
-                    p_f1 = json.pf1;
-                    freq2 = json.f2;
-                    p_f2 = json.pf2;
-                    freq3 = json.f3;
-                    p_f3 = json.pf3;
-                    freq4 = json.f4;
-                    p_f4 = json.pf4;
-                    freq5 = json.f5;
-                    p_f5 = json.pf5;
-                    freq6 = json.f6;
-                    p_f6 = json.pf6;
-                    label1 = json.time1;
-
                     for (var count = 0; count < label1.length; count++) {
                         if (volt1[count] == '0.0') {
                             volt1[count] = NaN;
@@ -2085,8 +997,6 @@ $(document).ready(function () {
                     let _e4 = parseFloat(json.e4[json.e4.length - 1]) - min_e4;
                     let _e5 = parseFloat(json.e5[json.e5.length - 1]) - min_e5;
                     let _e6 = parseFloat(json.e6[json.e6.length - 1]) - min_e6;
-                    let _eAll = _e1 + _e2 + _e3 + _e4 + _e5 + _e6;
-                    _eAll_month = parseFloat(json.sum_e1) + parseFloat(json.sum_e2) + parseFloat(json.sum_e3) + parseFloat(json.sum_e4) + parseFloat(json.sum_e5) + parseFloat(json.sum_e6);
 
                     $("#voltage1").html(json.v1[json.v1.length - 1]);
                     $("#current1").html(json.i1[json.i1.length - 1]);
@@ -2130,143 +1040,12 @@ $(document).ready(function () {
                     $("#frequency6").html(json.f6[json.f6.length - 1]);
                     $("#pf6").html(json.pf6[json.pf6.length - 1]);
 
-                    $("#time").html(json.time1[json.time1.length - 1]);
-
-                    $("#energy_day").html("<span style='color:grey'><small>หน่วย(kWh): </small></span>" + (_eAll).toFixed(1));
-                    $("#bill_112").html("<span style='color:grey'><small>เป็นเงิน </small></span> ฿ " + (calc112Month(_eAll_month) / _eAll_month * _eAll).toFixed(1));
-                    $("#energy_month").html("<span style='color:grey'><small>หน่วย(kWh): </small></span>" + (_eAll_month).toFixed(1));
-                    $("#bill_112_mouth").html("<span style='color:grey'><small>เป็นเงิน </small></span> ฿ " + calc112Month(_eAll_month).toFixed(1));
-
-                    kwh_per_energy = calc112Month(_eAll_month) / _eAll_month;
-
-                    Chart_1.options.scales['yv'].display = false;
-                    Chart_1.options.scales['yi'].display = false;
-                    Chart_1.options.scales['ye'].display = false;
-                    Chart_1.options.scales['yf'].display = false;
-                    Chart_1.options.scales['ypf'].display = false;
-
-                    Chart_2.options.scales['yv'].display = false;
-                    Chart_2.options.scales['yi'].display = false;
-                    Chart_2.options.scales['ye'].display = false;
-                    Chart_2.options.scales['yf'].display = false;
-                    Chart_2.options.scales['ypf'].display = false;
-
-                    Chart_3.options.scales['yv'].display = false;
-                    Chart_3.options.scales['yi'].display = false;
-                    Chart_3.options.scales['ye'].display = false;
-                    Chart_3.options.scales['yf'].display = false;
-                    Chart_3.options.scales['ypf'].display = false;
-
-                    Chart_4.options.scales['yv'].display = false;
-                    Chart_4.options.scales['yi'].display = false;
-                    Chart_4.options.scales['ye'].display = false;
-                    Chart_4.options.scales['yf'].display = false;
-                    Chart_4.options.scales['ypf'].display = false;
-
-                    Chart_5.options.scales['yv'].display = false;
-                    Chart_5.options.scales['yi'].display = false;
-                    Chart_5.options.scales['ye'].display = false;
-                    Chart_5.options.scales['yf'].display = false;
-                    Chart_5.options.scales['ypf'].display = false;
-
-                    Chart_6.options.scales['yv'].display = false;
-                    Chart_6.options.scales['yi'].display = false;
-                    Chart_6.options.scales['ye'].display = false;
-                    Chart_6.options.scales['yf'].display = false;
-                    Chart_6.options.scales['ypf'].display = false;
-
-                    Chart_1.data.datasets[0].data = volt1;
-                    Chart_1.data.datasets[0].label = 'Volt';
-                    Chart_1.data.datasets[1].data = curr1;
-                    Chart_1.data.datasets[1].label = 'Current';
-                    Chart_1.data.datasets[2].data = power1;
-                    Chart_1.data.datasets[2].label = 'Power';
-                    Chart_1.data.datasets[3].data = energy1;
-                    Chart_1.data.datasets[3].label = 'Energy';
-                    Chart_1.data.datasets[4].data = freq1;
-                    Chart_1.data.datasets[4].label = 'Frequency';
-                    Chart_1.data.datasets[5].data = p_f1;
-                    Chart_1.data.datasets[5].label = 'PF';
-                    Chart_1.data.labels = label1;
-                    Chart_1.update();
-
-                    Chart_2.data.datasets[0].data = volt2;
-                    Chart_2.data.datasets[0].label = 'Volt';
-                    Chart_2.data.datasets[1].data = curr2;
-                    Chart_2.data.datasets[1].label = 'Current';
-                    Chart_2.data.datasets[2].data = power2;
-                    Chart_2.data.datasets[2].label = 'Power';
-                    Chart_2.data.datasets[3].data = energy2;
-                    Chart_2.data.datasets[3].label = 'Energy';
-                    Chart_2.data.datasets[4].data = freq2;
-                    Chart_2.data.datasets[4].label = 'Frequency';
-                    Chart_2.data.datasets[5].data = p_f2;
-                    Chart_2.data.datasets[5].label = 'PF';
-                    Chart_2.data.labels = label1;
-                    Chart_2.update();
-
-                    Chart_3.data.datasets[0].data = volt3;
-                    Chart_3.data.datasets[0].label = 'Volt';
-                    Chart_3.data.datasets[1].data = curr3;
-                    Chart_3.data.datasets[1].label = 'Current';
-                    Chart_3.data.datasets[2].data = power3;
-                    Chart_3.data.datasets[2].label = 'Power';
-                    Chart_3.data.datasets[3].data = energy3;
-                    Chart_3.data.datasets[3].label = 'Energy';
-                    Chart_3.data.datasets[4].data = freq3;
-                    Chart_3.data.datasets[4].label = 'Frequency';
-                    Chart_3.data.datasets[5].data = p_f3;
-                    Chart_3.data.datasets[5].label = 'PF';
-                    Chart_3.data.labels = label1;
-                    Chart_3.update();
-
-                    Chart_4.data.datasets[0].data = volt4;
-                    Chart_4.data.datasets[0].label = 'Volt';
-                    Chart_4.data.datasets[1].data = curr4;
-                    Chart_4.data.datasets[1].label = 'Current';
-                    Chart_4.data.datasets[2].data = power4;
-                    Chart_4.data.datasets[2].label = 'Power';
-                    Chart_4.data.datasets[3].data = energy4;
-                    Chart_4.data.datasets[3].label = 'Energy';
-                    Chart_4.data.datasets[4].data = freq4;
-                    Chart_4.data.datasets[4].label = 'Frequency';
-                    Chart_4.data.datasets[5].data = p_f4;
-                    Chart_4.data.datasets[5].label = 'PF';
-                    Chart_4.data.labels = label1;
-                    Chart_4.update();
-
-                    Chart_5.data.datasets[0].data = volt5;
-                    Chart_5.data.datasets[0].label = 'Volt';
-                    Chart_5.data.datasets[1].data = curr5;
-                    Chart_5.data.datasets[1].label = 'Current';
-                    Chart_5.data.datasets[2].data = power5;
-                    Chart_5.data.datasets[2].label = 'Power';
-                    Chart_5.data.datasets[3].data = energy5;
-                    Chart_5.data.datasets[3].label = 'Energy';
-                    Chart_5.data.datasets[4].data = freq5;
-                    Chart_5.data.datasets[4].label = 'Frequency';
-                    Chart_5.data.datasets[5].data = p_f5;
-                    Chart_5.data.datasets[5].label = 'PF';
-                    Chart_5.data.labels = label1;
-                    Chart_5.update();
-
-                    Chart_6.data.datasets[0].data = volt6;
-                    Chart_6.data.datasets[0].label = 'Volt';
-                    Chart_6.data.datasets[1].data = curr6;
-                    Chart_6.data.datasets[1].label = 'Current';
-                    Chart_6.data.datasets[2].data = power6;
-                    Chart_6.data.datasets[2].label = 'Power';
-                    Chart_6.data.datasets[3].data = energy6;
-                    Chart_6.data.datasets[3].label = 'Energy';
-                    Chart_6.data.datasets[4].data = freq6;
-                    Chart_6.data.datasets[4].label = 'Frequency';
-                    Chart_6.data.datasets[5].data = p_f6;
-                    Chart_6.data.datasets[5].label = 'PF';
-                    Chart_6.data.labels = label1;
-                    Chart_6.update();
+                    gettodayminute();
+                    getyesterdayminute();
 
                     $(".overlay").fadeOut(100);
                     setInterval(updateLastData, 5000); // 1000 = 1 second
+
                 }
                 catch (err) {
                     console.log(err.message);
@@ -2291,158 +1070,7 @@ $(document).ready(function () {
                 // console.log(data);
                 var json = JSON.parse(data);
                 let fulltime1 = json.time1[0];
-                let _eAll;
                 if (label1[label1.length - 1] != fulltime1) {
-
-                    if (label1.length > 400) {
-                        label1.shift();
-                        volt1.shift();
-                        curr1.shift();
-                        power1.shift();
-                        energy1.shift();
-                        freq1.shift();
-                        p_f1.shift();
-                        volt2.shift();
-                        curr2.shift();
-                        power2.shift();
-                        energy2.shift();
-                        freq2.shift();
-                        p_f2.shift();
-                        volt3.shift();
-                        curr3.shift();
-                        power3.shift();
-                        energy3.shift();
-                        freq3.shift();
-                        p_f3.shift();
-                        volt4.shift();
-                        curr4.shift();
-                        power4.shift();
-                        energy4.shift();
-                        freq4.shift();
-                        p_f4.shift();
-                        volt5.shift();
-                        curr5.shift();
-                        power5.shift();
-                        energy5.shift();
-                        freq5.shift();
-                        p_f5.shift();
-                        volt6.shift();
-                        curr6.shift();
-                        power6.shift();
-                        energy6.shift();
-                        freq6.shift();
-                        p_f6.shift();
-                    }
-                    // console.log(json.v1[0]);
-                    if (json.v1[0] == '0.0') {
-                        volt1.push(NaN);
-                        curr1.push(NaN);
-                        power1.push(NaN);
-                        energy1.push(NaN);
-                        freq1.push(NaN);
-                        p_f1.push(NaN);
-                    }
-                    else {
-                        volt1.push(json.v1[0]);
-                        curr1.push(json.i1[0]);
-                        power1.push(json.p1[0]);
-                        energy1.push(parseFloat(json.e1[0]) - min_e1);
-                        freq1.push(json.f1[0]);
-                        p_f1.push(json.pf1[0]);
-                        _eAll += parseFloat(json.e1[0]) - min_e1;
-                    }
-
-                    if (json.v2[0] == '0.0') {
-                        volt2.push(NaN);
-                        curr2.push(NaN);
-                        power2.push(NaN);
-                        energy2.push(NaN);
-                        freq2.push(NaN);
-                        p_f2.push(NaN);
-                    }
-                    else {
-                        volt2.push(json.v2[0]);
-                        curr2.push(json.i2[0]);
-                        power2.push(json.p2[0]);
-                        energy2.push(parseFloat(json.e2[0]) - min_e2);
-                        freq2.push(json.f2[0]);
-                        p_f2.push(json.pf2[0]);
-                        _eAll += parseFloat(json.e2[0]) - min_e2;
-                    }
-
-                    if (json.v3[0] == '0.0') {
-                        volt3.push(NaN);
-                        curr3.push(NaN);
-                        power3.push(NaN);
-                        energy3.push(NaN);
-                        freq3.push(NaN);
-                        p_f3.push(NaN);
-                    }
-                    else {
-                        volt3.push(json.v3[0]);
-                        curr3.push(json.i3[0]);
-                        power3.push(json.p3[0]);
-                        energy3.push(parseFloat(json.e3[0]) - min_e3);
-                        freq3.push(json.f3[0]);
-                        p_f3.push(json.pf3[0]);
-                        _eAll += parseFloat(json.e3[0]) - min_e3;
-                    }
-
-                    if (json.v4[0] == '0.0') {
-                        volt4.push(NaN);
-                        curr4.push(NaN);
-                        power4.push(NaN);
-                        energy4.push(NaN);
-                        freq4.push(NaN);
-                        p_f4.push(NaN);
-                    }
-                    else {
-                        volt4.push(json.v4[0]);
-                        curr4.push(json.i4[0]);
-                        power4.push(json.p4[0]);
-                        energy4.push(parseFloat(json.e4[0]) - min_e4);
-                        freq4.push(json.f4[0]);
-                        p_f4.push(json.pf4[0]);
-                        _eAll += parseFloat(json.e4[0]) - min_e4;
-                    }
-
-                    if (json.v5[0] == '0.0') {
-                        volt5.push(NaN);
-                        curr5.push(NaN);
-                        power5.push(NaN);
-                        energy5.push(NaN);
-                        freq5.push(NaN);
-                        p_f5.push(NaN);
-                    }
-                    else {
-                        volt5.push(json.v5[0]);
-                        curr5.push(json.i5[0]);
-                        power5.push(json.p5[0]);
-                        energy5.push(parseFloat(json.e5[0]) - min_e5);
-                        freq5.push(json.f5[0]);
-                        p_f5.push(json.pf5[0]);
-                        _eAll += parseFloat(json.e5[0]) - min_e5;
-                    }
-
-                    if (json.v6[0] == '0.0') {
-                        volt6.push(NaN);
-                        curr6.push(NaN);
-                        power6.push(NaN);
-                        energy6.push(NaN);
-                        freq6.push(NaN);
-                        p_f6.push(NaN);
-                    }
-                    else {
-                        volt6.push(json.v6[0]);
-                        curr6.push(json.i6[0]);
-                        power6.push(json.p6[0]);
-                        energy6.push(parseFloat(json.e6[0]) - min_e6);
-                        freq6.push(json.f6[0]);
-                        p_f6.push(json.pf6[0]);
-                        _eAll += parseFloat(json.e6[0]) - min_e6;
-                    }
-
-                    label1.push(json.time1[0]);
 
                     $("#voltage1").html(json.v1[0]);
                     $("#current1").html(json.i1[0]);
@@ -2486,25 +1114,101 @@ $(document).ready(function () {
                     $("#frequency6").html(json.f6[0]);
                     $("#pf6").html(json.pf6[0]);
 
-                    $("#time").html(json.time1[0]);
-
-                    Chart_1.update();
-                    Chart_2.update();
-                    Chart_3.update();
-                    Chart_4.update();
-                    Chart_5.update();
-                    Chart_6.update();
                 }
 
-                if (json.v1[0] != '0.0' && json.v2[0] != '0.0' && json.v3[0] != '0.0' &&
-                    json.v4[0] != '0.0' && json.v5[0] != '0.0' && json.v6[0] != '0.0' &&
-                    label1[label1.length - 1] != fulltime1) {
-                    $("#energy_day").html("<span style='color:grey'><small>หน่วย(kWh): </small></span>" + _eAll.toFixed(1));
-                    $("#bill_112").html("<span style='color:grey'><small>เป็นเงิน </small></span> ฿ " + (calc112Month(_eAll_month) / _eAll_month * _eAll).toFixed(1));
-                }
             }
         })
     };
+
+    function updateminute() {
+        $.ajax({
+            url: "ajax/custom/1_6phase.php",
+            type: "post",
+            data: {
+                data: "min",
+                point: 1
+            },
+            success: function (data) {
+                // console.log(data);
+                var json = JSON.parse(data);
+                let fulltime1 = json.time1[0];
+
+                if (today_min_label1[today_min_label1.length - 1] != fulltime1) {
+
+                    today_min_power.push(parseFloat(json.p1[0]) + parseFloat(json.p2[0]) + parseFloat(json.p3[0]) + parseFloat(json.p4[0]) + parseFloat(json.p5[0]) + parseFloat(json.p6[0]));
+                    today_min_label1.push(fulltime1);
+
+                    daily_load_curve_2.update();
+
+                }
+            }
+        })
+    }
+
+    function getyesterdayminute() {
+        $.ajax({
+            url: "ajax/custom/1_6phase.php",
+            type: "post",
+            data: {
+                data: "min",
+                range: {
+                    start: moment().subtract(1, 'days').startOf('days').format('YYYY-MM-DD HH:mm:ss'),
+                    end: moment().subtract(1, 'days').endOf('days').format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            success: function (data) {
+                // console.log(data);
+                var json = JSON.parse(data);
+
+                yesterday_min_label1 = json.time1.reverse();
+
+                json.p1.forEach((number, index) => {
+                    yesterday_min_power.push(parseFloat(number) + parseFloat(json.p2[index]) + parseFloat(json.p3[index]) + parseFloat(json.p4[index]) + parseFloat(json.p5[index]) + parseFloat(json.p6[index]));
+                });
+
+                yesterday_min_power.reverse();
+
+                daily_load_curve.data.datasets[0].data = yesterday_min_power;
+                daily_load_curve.data.labels = yesterday_min_label1;
+                daily_load_curve.update();
+
+            }
+        })
+    }
+
+    function gettodayminute() {
+        $.ajax({
+            url: "ajax/custom/1_6phase.php",
+            type: "post",
+            data: {
+                data: "min",
+                range: {
+                    start: moment().startOf('days').format('YYYY-MM-DD HH:mm:ss'),
+                    end: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            success: function (data) {
+
+                // console.log(data);
+
+                var json = JSON.parse(data);
+
+                today_min_label1 = json.time1.reverse();
+
+                json.p1.forEach((number, index) => {
+                    today_min_power.push(parseFloat(json.p1[index]) + parseFloat(json.p2[index]) + parseFloat(json.p3[index]) + parseFloat(json.p4[index]) + parseFloat(json.p5[index]) + parseFloat(json.p6[index]));
+                    // console.log('Index: ' + index + ' Value: ' + number + 'sum: ' + today_min_power);
+                });
+                today_min_power.reverse();
+
+                daily_load_curve_2.data.datasets[0].data = today_min_power;
+                daily_load_curve_2.data.labels = today_min_label1;
+                daily_load_curve_2.update();
+
+                setInterval(updateminute, 6000);
+            }
+        })
+    }
 
 
     // for tab select
@@ -2512,14 +1216,13 @@ $(document).ready(function () {
 
         $("#value").show();
         $("#io").show();
-        $("#chart").show();
+        $("#chart").hide();
         $(".overview-page").show();
         $("#uplot").hide();
         $("#google_table").hide();
         $(".setting-page").hide();
         $('#chart_name').text('Power [watt] & Voltage [v]');
         $("#Charthistory").hide();
-        $("#Chart1").show(); $("#Chart2").show(); $("#Chart3").show(); $("#Chart4").show(); $("#Chart5").show(); $("#Chart6").show();
         $("#range_display").hide();
         $(".history_view_class").hide();
         $(".history_option_class").hide();
@@ -2542,12 +1245,6 @@ $(document).ready(function () {
         $(".setting-page").hide();
         $("#Charthistory").show();
         $(".overview-page").hide();
-        $("#Chart1").hide();
-        $("#Chart2").hide();
-        $("#Chart3").hide();
-        $("#Chart4").hide();
-        $("#Chart5").hide();
-        $("#Chart6").hide();
         $("#range_display").show();
         $(".history_option_class").show();
         $(".history_view_class").hide();
@@ -2860,12 +1557,6 @@ $(document).ready(function () {
         $("#google_table").hide();
         $(".setting-page").hide();
         $("#Charthistory").show();
-        $("#Chart1").hide();
-        $("#Chart2").hide();
-        $("#Chart3").hide();
-        $("#Chart4").hide();
-        $("#Chart5").hide();
-        $("#Chart6").hide();
         $(".history_option_class").show();
         $(".history_view_class").hide();
         $(".month-view-page").show();
@@ -2918,12 +1609,6 @@ $(document).ready(function () {
         $(".setting-page").hide();
         $("#uplot").show(); $(".overview-page").hide();
         $("#google_table").show();
-        $("#Chart1").hide();
-        $("#Chart2").hide();
-        $("#Chart3").hide();
-        $("#Chart4").hide();
-        $("#Chart5").hide();
-        $("#Chart6").hide();
         $("#Charthistory").hide();
         $("#uplot").show();
         $(".history_option_class").show();
