@@ -607,6 +607,35 @@
                     </div>
                 </div>
 
+                <!-- daily load curve -->
+                <div class="card overview-page">
+                    <!-- Loading (remove the following to stop the loading)-->
+                    <div class="overlay dark">
+                        <i class="fas fa-3x fa-sync-alt"></i>
+                        <h3></h3>
+                    </div>
+                    <!-- end loading -->
+                    <div class="card-header">
+                        <h5 class="card-title">Daily Load Curve</h5>
+                        <div class="card-tools">
+                            <ul class="nav nav-pills ml-auto p-2">
+                                <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-12 ">
+                                <div class="chart">
+                                    <canvas id="daily_load_curve_3" height="300" style="height: 300px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card overview-page">
                     <!-- Loading (remove the following to stop the loading)-->

@@ -11,6 +11,7 @@ $(document).ready(function () {
 
     var today_min_power = [], today_min_label1 = [];
     var yesterday_min_power = [], yesterday_min_label1 = [];
+    var week_min_power = [], week_min_label1 = [], week_min_label = [], dayofweek;
 
     var min_e1, min_e2, min_e3, min_e4, min_e5, min_e6;
     var _eAll_month;
@@ -646,6 +647,124 @@ $(document).ready(function () {
             }
         });
 
+        daily_load_curve_3 = new Chart(
+            document.getElementById('daily_load_curve_3'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'จันทร์',
+                    data: [],
+                    tension: 0.1,
+                    borderColor: 'yellow',
+                    pointColor: 'yellow',
+                    pointStrokeColor: 'yellow',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }, {
+                    label: 'อังคาร',
+                    data: [],
+                    tension: 0.1,
+                    borderColor: 'pink',
+                    pointColor: 'pink',
+                    pointStrokeColor: 'pink',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }, {
+                    label: 'พุธ',
+                    data: [],
+                    tension: 0.1,
+                    borderColor: 'green',
+                    pointColor: 'green',
+                    pointStrokeColor: 'green',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }, {
+                    label: 'พฤหัส',
+                    data: [],
+                    tension: 0.1,
+                    borderColor: 'orange',
+                    pointColor: 'orange',
+                    pointStrokeColor: 'orange',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }, {
+                    label: 'ศุกร์',
+                    data: [],
+                    tension: 0.1,
+                    borderColor: 'blue',
+                    pointColor: 'blue',
+                    pointStrokeColor: 'blue',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }, {
+                    label: 'เสาร์',
+                    data: [],
+                    tension: 0.1,
+                    borderColor: 'purple',
+                    pointColor: 'purple',
+                    pointStrokeColor: 'purple',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }, {
+                    label: 'อาทิตย์',
+                    data: [],
+                    tension: 0.1,
+                    borderColor: 'red',
+                    pointColor: 'red',
+                    pointStrokeColor: 'red',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                }]
+            },
+            options: {
+                // Turn off animations and data parsing for performance
+                // animation: false,
+                maintainAspectRatio: false,
+                responsive: true,
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                    },
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'hour'
+                        },
+                        title: {
+                            display: true,
+                            text: "Time of Day(h)",
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: "Load(W)",
+                        },
+                    }
+                },
+                spanGaps: true, // enable for all datasets
+                datasets: {
+                    line: {
+                        pointRadius: 0 // disable for all `'line'` datasets
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 0 // default to disabled in all datasets
+                    }
+                }
+            }
+        });
+
         Chart_day_bill = new Chart(
             document.getElementById('Chart_day_bill'), {
             type: 'bar',
@@ -1206,10 +1325,133 @@ $(document).ready(function () {
                 daily_load_curve_2.update();
 
                 setInterval(updateminute, 6000);
+                getweekminute();
             }
         })
     }
 
+    function getweekminute() {
+        $.ajax({
+            url: "ajax/custom/1_6phase.php",
+            type: "post",
+            data: {
+                data: "min",
+                range: {
+                    start: moment().startOf('week').format('YYYY-MM-DD HH:mm:ss'),
+                    end: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            success: function (data) {
+
+                // console.log(data);
+
+                var json = JSON.parse(data);
+
+                json.time1.reverse();
+                json.p1.reverse(); json.p2.reverse(); json.p3.reverse(); json.p4.reverse(); json.p5.reverse(); json.p6.reverse();
+                
+                dayofweek = 0;
+                let lastdayofweek = (json.time1[0].split('-')[2]).split(' ')[0];
+
+                let _week_min_power = [];
+                _week_min_power[0] = [];
+                _week_min_power[1] = [];
+                _week_min_power[2] = [];
+                _week_min_power[3] = [];
+                _week_min_power[4] = [];
+                _week_min_power[5] = [];
+                _week_min_power[6] = [];
+
+                week_min_power[0] = []; week_min_label1[0] = [];
+                week_min_power[1] = []; week_min_label1[1] = [];
+                week_min_power[2] = []; week_min_label1[2] = [];
+                week_min_power[3] = []; week_min_label1[3] = [];
+                week_min_power[4] = []; week_min_label1[4] = [];
+                week_min_power[5] = []; week_min_label1[5] = [];
+                week_min_power[6] = []; week_min_label1[6] = [];
+
+                json.time1.forEach((number, index) => {
+                    if ((json.time1[index].split('-')[2]).split(' ')[0] != lastdayofweek) {
+                        lastdayofweek = (json.time1[index].split('-')[2]).split(' ')[0];
+                        // console.log(lastdayofweek);
+                        dayofweek++;
+                    }
+                    _week_min_power[dayofweek].push(parseFloat(json.p1[index]) + parseFloat(json.p2[index]) + parseFloat(json.p3[index]) + parseFloat(json.p4[index]) + parseFloat(json.p5[index]) + parseFloat(json.p6[index]));
+                    week_min_label1[dayofweek].push("2023-01-01 " + (json.time1[index]).split(' ')[1]);
+                });
+
+                week_min_label = week_min_label1[0];
+                week_min_label = [...new Set([...week_min_label, ...week_min_label1[1]])];
+                week_min_label = [...new Set([...week_min_label, ...week_min_label1[2]])];
+                week_min_label = [...new Set([...week_min_label, ...week_min_label1[3]])];
+                week_min_label = [...new Set([...week_min_label, ...week_min_label1[4]])];
+                week_min_label = [...new Set([...week_min_label, ...week_min_label1[5]])];
+                week_min_label = [...new Set([...week_min_label, ...week_min_label1[6]])];
+
+
+                week_min_label.sort();
+
+                // add nan
+                let i1 = 0, i2 = 0, i3 = 0, i4 = 0, i5 = 0, i6 = 0, i7 = 0;
+                for (var i = 0; i < week_min_label.length; i++) {
+                    if (week_min_label[i] == week_min_label1[0][i1]) {
+                        week_min_power[0][i] = _week_min_power[0][i1];
+                        i1++;
+                    } else {
+                        week_min_power[0][i] = NaN;
+                    }
+                    if (week_min_label[i] == week_min_label1[1][i2]) {
+                        week_min_power[1][i] = _week_min_power[1][i2];
+                        i2++;
+                    } else {
+                        week_min_power[1][i] = NaN;
+                    }
+                    if (week_min_label[i] == week_min_label1[2][i3]) {
+                        week_min_power[2][i] = _week_min_power[2][i3];
+                        i3++;
+                    } else {
+                        week_min_power[2][i] = NaN;
+                    }
+                    if (week_min_label[i] == week_min_label1[3][i4]) {
+                        week_min_power[3][i] = _week_min_power[3][i4];
+                        i4++;
+                    } else {
+                        week_min_power[3][i] = NaN;
+                    }
+                    if (week_min_label[i] == week_min_label1[4][i5]) {
+                        week_min_power[4][i] = _week_min_power[4][i5];
+                        i5++;
+                    } else {
+                        week_min_power[4][i] = NaN;
+                    }
+                    if (week_min_label[i] == week_min_label1[5][i6]) {
+                        week_min_power[5][i] = _week_min_power[5][i6];
+                        i6++;
+                    } else {
+                        week_min_power[5][i] = NaN;
+                    }
+                    if (week_min_label[i] == week_min_label1[6][i7]) {
+                        week_min_power[6][i] = _week_min_power[6][i7];
+                        i7++;
+                    } else {
+                        week_min_power[6][i] = NaN;
+                    }
+                    
+                }
+
+                daily_load_curve_3.data.labels = week_min_label;
+                daily_load_curve_3.data.datasets[0].data = week_min_power[0];
+                daily_load_curve_3.data.datasets[1].data = week_min_power[1];
+                daily_load_curve_3.data.datasets[2].data = week_min_power[2];
+                daily_load_curve_3.data.datasets[3].data = week_min_power[3];
+                daily_load_curve_3.data.datasets[4].data = week_min_power[4];
+                daily_load_curve_3.data.datasets[5].data = week_min_power[5];
+                daily_load_curve_3.data.datasets[6].data = week_min_power[6];
+                daily_load_curve_3.update();
+
+            }
+        })
+    }
 
     // for tab select
     $("#overview_option").click(function () {
