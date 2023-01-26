@@ -1259,6 +1259,10 @@ $(document).ready(function () {
 
                     daily_load_curve_2.update();
 
+                    let timeposition = parseInt((json.time1[0].split(' ')[1]).split(':')[0])*60+parseInt((json.time1[0].split(' ')[1]).split(':')[1])
+
+                    week_min_power[dayofweek][timeposition] = (parseFloat(json.p1[0]) + parseFloat(json.p2[0]) + parseFloat(json.p3[0]) + parseFloat(json.p4[0]) + parseFloat(json.p5[0]) + parseFloat(json.p6[0]));
+                    daily_load_curve_3.update();
                 }
             }
         })
@@ -1349,7 +1353,7 @@ $(document).ready(function () {
 
                 json.time1.reverse();
                 json.p1.reverse(); json.p2.reverse(); json.p3.reverse(); json.p4.reverse(); json.p5.reverse(); json.p6.reverse();
-                
+
                 dayofweek = 0;
                 let lastdayofweek = (json.time1[0].split('-')[2]).split(' ')[0];
 
@@ -1380,16 +1384,14 @@ $(document).ready(function () {
                     week_min_label1[dayofweek].push("2023-01-01 " + (json.time1[index]).split(' ')[1]);
                 });
 
-                week_min_label = week_min_label1[0];
-                week_min_label = [...new Set([...week_min_label, ...week_min_label1[1]])];
-                week_min_label = [...new Set([...week_min_label, ...week_min_label1[2]])];
-                week_min_label = [...new Set([...week_min_label, ...week_min_label1[3]])];
-                week_min_label = [...new Set([...week_min_label, ...week_min_label1[4]])];
-                week_min_label = [...new Set([...week_min_label, ...week_min_label1[5]])];
-                week_min_label = [...new Set([...week_min_label, ...week_min_label1[6]])];
+                // generate minute
+                let hours = [];
+                for (let minute = 0; minute < 24*60; minute++) {
+                    hours.push(moment().startOf('day').add(minute, 'minute').format('2023-01-01 HH:mm'));
+                }
+                // console.log(hours);
 
-
-                week_min_label.sort();
+                week_min_label = hours;
 
                 // add nan
                 let i1 = 0, i2 = 0, i3 = 0, i4 = 0, i5 = 0, i6 = 0, i7 = 0;
@@ -1436,7 +1438,7 @@ $(document).ready(function () {
                     } else {
                         week_min_power[6][i] = NaN;
                     }
-                    
+
                 }
 
                 daily_load_curve_3.data.labels = week_min_label;
