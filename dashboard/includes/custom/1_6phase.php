@@ -738,6 +738,29 @@
 
 </section>
 
+<style>
+    #scBtn {
+        display: block;
+        position: fixed;
+        bottom: 10px;
+        right: 15px;
+        z-index: 99;
+        font-size: 14px;
+        border: none;
+        outline: none;
+        background-color: rgb(60,141,188);
+        color: white;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    #scBtn:hover {
+        background-color: #555;
+    }
+</style>
+
+<button id="scBtn" title="Stop Scroll">Stop Scroll</button>
 
 <!-- script for real time chart -->
 <script>
@@ -750,7 +773,7 @@
     $(document).ready(function() {
 
         var scroll1, scroll2, scroll3;
-        const scrollInterval = 10000;
+        const scrollInterval = 5000;
 
         function scrollto1() {
             document.getElementById('subject').scrollIntoView({
@@ -787,6 +810,11 @@
         }
 
         startScroll();
+
+        $("#scBtn").click(function() {
+            $("#scBtn").hide();
+            stopScroll();
+        });
 
     });
 </script>

@@ -3164,12 +3164,50 @@ $(document).ready(function () {
 
 
 
-// for auto scroll
-// document.getElementById('value').scrollIntoView({
-//     behavior: 'smooth'
-//   });
+    // auto scrolling
+    var scroll1, scroll2, scroll3;
+    const scrollInterval = 5000;
 
-//   const element = document.getElementById("value");
-// element.scrollIntoView();
+    function scrollto1() {
+        document.getElementById('subject').scrollIntoView({
+            behavior: 'smooth'
+        });
+        scroll2 = setInterval(scrollto2, scrollInterval);
+        clearInterval(scroll1);
+    }
+
+    function scrollto2() {
+        document.getElementById('day-scroll').scrollIntoView({
+            behavior: 'smooth'
+        });
+        scroll3 = setInterval(scrollto3, scrollInterval);
+        clearInterval(scroll2);
+    }
+
+    function scrollto3() {
+        document.getElementById('weekly-scroll').scrollIntoView({
+            behavior: 'smooth'
+        });
+        scroll1 = setInterval(scrollto1, scrollInterval);
+        clearInterval(scroll3);
+    }
+
+    function stopScroll() {
+        clearInterval(scroll1);
+        clearInterval(scroll2);
+        clearInterval(scroll3);
+    }
+
+    function startScroll() {
+        scrollto1();
+    }
+
+    startScroll();
+
+    $("#scBtn").click(function () {
+        $("#scBtn").hide();
+        stopScroll();
+    });
+
 
 });
