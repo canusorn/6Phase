@@ -3166,7 +3166,7 @@ $(document).ready(function () {
 
     // auto scrolling
     var scroll1, scroll2, scroll3;
-    const scrollInterval = 5000;
+    const scrollInterval = 60000;
 
     function scrollto1() {
         document.getElementById('subject').scrollIntoView({
