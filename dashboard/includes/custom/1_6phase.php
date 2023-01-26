@@ -1,14 +1,3 @@
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <div class="d-flex flex-row bd-highlight mb-3">
-                    <h1 class="m-0 text-dark text-dark">หน้ารวม 6 เฟส</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Main content -->
 <section class="content">
@@ -28,11 +17,6 @@
         <div class="row" id="value">
             <div class="col-xl-6">
                 <div class="card">
-                    <!-- Loading (remove the following to stop the loading)-->
-                    <div class="overlay dark">
-                        <i class="fas fa-3x fa-sync-alt"></i>
-                        <h3></h3>
-                    </div>
                     <div class="card-header">
                         <h4 class="card-title">ค่าพารามิเตอร์จาก MDB 1</h4>
                         <div class="card-tools">
@@ -251,11 +235,6 @@
 
             <div class="col-xl-6">
                 <div class="card">
-                    <!-- Loading (remove the following to stop the loading)-->
-                    <div class="overlay dark">
-                        <i class="fas fa-3x fa-sync-alt"></i>
-                        <h3></h3>
-                    </div>
                     <div class="card-header">
                         <h4 class="card-title">ค่าพารามิเตอร์จาก MDB 2</h4>
                         <div class="card-tools">
@@ -549,12 +528,6 @@
 
                 <!-- daily load curve -->
                 <div class="card overview-page">
-                    <!-- Loading (remove the following to stop the loading)-->
-                    <div class="overlay dark">
-                        <i class="fas fa-3x fa-sync-alt"></i>
-                        <h3></h3>
-                    </div>
-                    <!-- end loading -->
                     <div class="card-header">
                         <h5 class="card-title">Daily Load Curve</h5>
                         <div class="card-tools">
@@ -579,12 +552,6 @@
 
                 <!-- daily load curve -->
                 <div class="card overview-page">
-                    <!-- Loading (remove the following to stop the loading)-->
-                    <div class="overlay dark">
-                        <i class="fas fa-3x fa-sync-alt"></i>
-                        <h3></h3>
-                    </div>
-                    <!-- end loading -->
                     <div class="card-header">
                         <h5 class="card-title">Daily Load Curve</h5>
                         <div class="card-tools">
@@ -609,12 +576,6 @@
 
                 <!-- daily load curve -->
                 <div class="card overview-page">
-                    <!-- Loading (remove the following to stop the loading)-->
-                    <div class="overlay dark">
-                        <i class="fas fa-3x fa-sync-alt"></i>
-                        <h3></h3>
-                    </div>
-                    <!-- end loading -->
                     <div class="card-header">
                         <h5 class="card-title">Daily Load Curve</h5>
                         <div class="card-tools">
@@ -637,7 +598,43 @@
                     </div>
                 </div>
 
+
                 <div class="card overview-page">
+                    <div class="card-header">
+                        <h5 class="card-title">Weekly Load Bar Chart</h5>
+                        <div class="card-tools">
+                            <!-- <ul class="nav nav-pills ml-auto p-2"> -->
+                            <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <!-- </ul> -->
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-sm-1">
+                                    <div class="row justify-content-center">
+                                        <div class="description-block ">
+                                            <!-- <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> -->
+                                            <h5 class="description-header" id="week_energy"></h5>
+                                            <span class="description-text">ค่าพลังงานที่ใช้ไป(kWh)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-11">
+                                    <div class="chart">
+                                        <canvas id="weekly_load_bar" height="300" style="height: 300px;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card month-view-page">
                     <!-- Loading (remove the following to stop the loading)-->
                     <div class="overlay dark">
                         <i class="fas fa-3x fa-sync-alt"></i>
@@ -688,7 +685,7 @@
                 </div>
 
 
-                <div class="card overview-page">
+                <div class="card month-view-page">
                     <!-- Loading (remove the following to stop the loading)-->
                     <div class="overlay dark">
                         <i class="fas fa-3x fa-sync-alt"></i>
