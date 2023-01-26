@@ -1,4 +1,3 @@
-
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -18,12 +17,12 @@
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">ค่าพารามิเตอร์จาก MDB 1</h4>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
+                        <h4class="card-title">ค่าพารามิเตอร์จาก MDB 1</h4>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
                     </div>
 
                     <!-- ./card-body -->
@@ -527,7 +526,7 @@
                 </div>
 
                 <!-- daily load curve -->
-                <div class="card overview-page">
+                <div id="day-scroll" class="card overview-page">
                     <div class="card-header">
                         <h5 class="card-title">Daily Load Curve</h5>
                         <div class="card-tools">
@@ -575,7 +574,7 @@
                 </div>
 
                 <!-- daily load curve -->
-                <div class="card overview-page">
+                <div id="weekly-scroll" class="card overview-page">
                     <div class="card-header">
                         <h5 class="card-title">Daily Load Curve</h5>
                         <div class="card-tools">
@@ -613,17 +612,15 @@
 
                     <div class="card-body">
                         <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-sm-1">
-                                    <div class="row justify-content-center">
-                                        <div class="description-block ">
-                                            <!-- <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> -->
-                                            <h5 class="description-header" id="week_energy"></h5>
-                                            <span class="description-text">ค่าพลังงานที่ใช้ไป(kWh)</span>
-                                        </div>
+                            <div class="row justify-content-center">
+                                <div class="col align-self-center">
+                                    <div class="description-block ">
+                                        <!-- <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> -->
+                                        <h5 class="description-header" id="week_energy"></h5>
+                                        <span class="description-text">ค่าพลังงานที่ใช้ไป(kWh)</span>
                                     </div>
                                 </div>
-                                <div class="col-sm-11">
+                                <div class="col-10 ml-9">
                                     <div class="chart">
                                         <canvas id="weekly_load_bar" height="300" style="height: 300px;"></canvas>
                                     </div>
@@ -748,3 +745,48 @@
 </script>
 <script type="text/javascript" src="js/ebill.js?n=2"></script>
 <script type="text/javascript" src="includes/custom/1_6phase.js?n=2"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var scroll1, scroll2, scroll3;
+        const scrollInterval = 10000;
+
+        function scrollto1() {
+            document.getElementById('subject').scrollIntoView({
+                behavior: 'smooth'
+            });
+            scroll2 = setInterval(scrollto2, scrollInterval);
+            clearInterval(scroll1);
+        }
+
+        function scrollto2() {
+            document.getElementById('day-scroll').scrollIntoView({
+                behavior: 'smooth'
+            });
+            scroll3 = setInterval(scrollto3, scrollInterval);
+            clearInterval(scroll2);
+        }
+
+        function scrollto3() {
+            document.getElementById('weekly-scroll').scrollIntoView({
+                behavior: 'smooth'
+            });
+            scroll1 = setInterval(scrollto1, scrollInterval);
+            clearInterval(scroll3);
+        }
+
+        function stopScroll() {
+            clearInterval(scroll1);
+            clearInterval(scroll2);
+            clearInterval(scroll3);
+        }
+
+        function startScroll() {
+            scrollto1();
+        }
+
+        startScroll();
+
+    });
+</script>

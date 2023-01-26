@@ -17,7 +17,7 @@ $activedevice = ESP_ID;
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col">
-                <div class="d-flex flex-row bd-highlight mb-3">
+                <div id="subject" class="d-flex flex-row bd-highlight mb-3">
                     <h1 class="m-0 pr-2">อุปกรณ์บันทึกและแสดงค่าพลังงานไฟฟ้าผ่านเครือข่ายไร้สาย</h1>
                     <span id="device_status" class="badge badge-secondary align-self-center"></span>
                 </div>

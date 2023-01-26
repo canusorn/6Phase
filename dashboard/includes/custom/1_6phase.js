@@ -3163,4 +3163,13 @@ $(document).ready(function () {
     });
 
 
+
+// for auto scroll
+// document.getElementById('value').scrollIntoView({
+//     behavior: 'smooth'
+//   });
+
+//   const element = document.getElementById("value");
+// element.scrollIntoView();
+
 });
