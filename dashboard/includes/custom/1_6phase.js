@@ -653,6 +653,15 @@ $(document).ready(function () {
             data: {
                 labels: [],
                 datasets: [{
+                    label: 'อาทิตย์',
+                    data: [],
+                    tension: 0.1,
+                    borderColor: 'red',
+                    pointColor: 'red',
+                    pointStrokeColor: 'red',
+                    yAxisID: 'y',
+                    // pointRadius: 0.5,
+                },{
                     label: 'จันทร์',
                     data: [],
                     tension: 0.1,
@@ -706,16 +715,7 @@ $(document).ready(function () {
                     pointStrokeColor: 'purple',
                     yAxisID: 'y',
                     // pointRadius: 0.5,
-                }, {
-                    label: 'อาทิตย์',
-                    data: [],
-                    tension: 0.1,
-                    borderColor: 'red',
-                    pointColor: 'red',
-                    pointStrokeColor: 'red',
-                    yAxisID: 'y',
-                    // pointRadius: 0.5,
-                }]
+                } ]
             },
             options: {
                 // Turn off animations and data parsing for performance
@@ -1355,7 +1355,7 @@ $(document).ready(function () {
                 json.p1.reverse(); json.p2.reverse(); json.p3.reverse(); json.p4.reverse(); json.p5.reverse(); json.p6.reverse();
 
                 dayofweek = 0;
-                let lastdayofweek = (json.time1[0].split('-')[2]).split(' ')[0];
+                let lastdayofweek = moment().startOf('week').format('DD');
 
                 let _week_min_power = [];
                 _week_min_power[0] = [];
@@ -1374,12 +1374,15 @@ $(document).ready(function () {
                 week_min_power[5] = []; week_min_label1[5] = [];
                 week_min_power[6] = []; week_min_label1[6] = [];
 
+                console.log(lastdayofweek);
                 json.time1.forEach((number, index) => {
-                    if ((json.time1[index].split('-')[2]).split(' ')[0] != lastdayofweek) {
-                        lastdayofweek = (json.time1[index].split('-')[2]).split(' ')[0];
-                        // console.log(lastdayofweek);
+                    console.log(lastdayofweek);
+                    while ((json.time1[index].split('-')[2]).split(' ')[0] != lastdayofweek || dayofweek >= 7) {
+                        console.log(lastdayofweek);
                         dayofweek++;
+                        lastdayofweek = moment().startOf('week').add(dayofweek, 'days').format('DD');
                     }
+                    console.log(lastdayofweek);
                     _week_min_power[dayofweek].push(parseFloat(json.p1[index]) + parseFloat(json.p2[index]) + parseFloat(json.p3[index]) + parseFloat(json.p4[index]) + parseFloat(json.p5[index]) + parseFloat(json.p6[index]));
                     week_min_label1[dayofweek].push("2023-01-01 " + (json.time1[index]).split(' ')[1]);
                 });
