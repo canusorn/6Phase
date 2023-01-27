@@ -118,8 +118,8 @@ $(document).ready(function () {
 
                 Chart_day_bill.data.datasets[0].data = day_use_energy;
                 Chart_day_bill.data.datasets[0].label = 'หน่วยที่ใช้';
-                Chart_day_bill.data.datasets[1].data = day_bill;
-                Chart_day_bill.data.datasets[1].label = 'ค่าไฟ';
+                // Chart_day_bill.data.datasets[1].data = day_bill;
+                // Chart_day_bill.data.datasets[1].label = 'ค่าไฟ';
                 Chart_day_bill.data.labels = label_mouth;
                 Chart_day_bill.update();
 
@@ -139,8 +139,8 @@ $(document).ready(function () {
 
                     Chart_month_bill.data.datasets[0].data = month_use_energy;
                     Chart_month_bill.data.datasets[0].label = 'หน่วยที่ใช้';
-                    Chart_month_bill.data.datasets[1].data = month_bill;
-                    Chart_month_bill.data.datasets[1].label = 'ค่าไฟ';
+                    // Chart_month_bill.data.datasets[1].data = month_bill;
+                    // Chart_month_bill.data.datasets[1].label = 'ค่าไฟ';
                     Chart_month_bill.data.labels = label_eachmonth;
                     Chart_month_bill.update();
 
@@ -861,18 +861,20 @@ $(document).ready(function () {
                     pointHighlightFill: '#fff',
                     pointHighlightStroke: 'rgba(60,141,188,1)',
                     // pointRadius: 0.5,
-                }, {
-                    label: 'ค่าไฟ',
-                    data: [],
-                    tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    yAxisID: 'yb',
-                    // pointRadius: 0.5,
-                }]
+                }, 
+                // {
+                //     label: 'ค่าไฟ',
+                //     data: [],
+                //     tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
+                //     borderColor: 'rgba(210, 214, 222, 1)', fill: true,
+                //     pointColor: 'rgba(210, 214, 222, 1)',
+                //     pointStrokeColor: '#c1c7d1',
+                //     pointHighlightFill: '#fff',
+                //     pointHighlightStroke: 'rgba(220,220,220,1)',
+                //     yAxisID: 'yb',
+                //     // pointRadius: 0.5,
+                // }
+            ]
             },
             options: {
                 // Turn off animations and data parsing for performance
@@ -888,21 +890,6 @@ $(document).ready(function () {
                     legend: {
                         display: true,
                     },
-                    zoom: {
-                        zoom: {
-                            wheel: {
-                                enabled: true,
-                                speed: 0.5,
-                            },
-                            pinch: {
-                                enabled: true
-                            },
-                            mode: 'x',
-                        }, pan: {
-                            enabled: true,
-                            mode: 'x',
-                        }
-                    },
                     datalabels: {
                         align: 'end',
                         anchor: 'end',
@@ -914,7 +901,9 @@ $(document).ready(function () {
                         title: {
                             display: true,
                             text: "วันที่",
-                        }
+                        },time: {
+                            unit: 'day'
+                        },
                     },
                     y: {
                         display: true,
@@ -953,18 +942,20 @@ $(document).ready(function () {
                     pointHighlightFill: '#fff',
                     pointHighlightStroke: 'rgba(60,141,188,1)',
                     // pointRadius: 0.5,
-                }, {
-                    label: 'ค่าไฟ',
-                    data: [],
-                    tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                    borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                    pointColor: 'rgba(210, 214, 222, 1)',
-                    pointStrokeColor: '#c1c7d1',
-                    pointHighlightFill: '#fff',
-                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                    yAxisID: 'yb',
-                    // pointRadius: 0.5,
-                }]
+                },
+                //  {
+                //     label: 'ค่าไฟ',
+                //     data: [],
+                //     tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
+                //     borderColor: 'rgba(210, 214, 222, 1)', fill: true,
+                //     pointColor: 'rgba(210, 214, 222, 1)',
+                //     pointStrokeColor: '#c1c7d1',
+                //     pointHighlightFill: '#fff',
+                //     pointHighlightStroke: 'rgba(220,220,220,1)',
+                //     yAxisID: 'yb',
+                //     // pointRadius: 0.5,
+                // }
+            ]
             },
             options: {
                 // Turn off animations and data parsing for performance
@@ -980,21 +971,6 @@ $(document).ready(function () {
                     legend: {
                         display: true,
                     },
-                    zoom: {
-                        zoom: {
-                            wheel: {
-                                enabled: true,
-                                speed: 0.5,
-                            },
-                            pinch: {
-                                enabled: true
-                            },
-                            mode: 'x',
-                        }, pan: {
-                            enabled: true,
-                            mode: 'x',
-                        }
-                    },
                     datalabels: {
                         align: 'end',
                         anchor: 'end',
@@ -1006,7 +982,9 @@ $(document).ready(function () {
                         title: {
                             display: true,
                             text: "เดือน",
-                        }
+                        },time: {
+                            unit: 'month'
+                        },
                     },
                     y: {
                         display: true,
@@ -1783,7 +1761,7 @@ $(document).ready(function () {
         $.post('ajax/custom/1_6phase.php', {
             data: "day",
             range: {
-                start: moment().subtract(2, 'month').startOf('month').format('YYYY-MM-DD'),
+                start: moment().startOf('month').format('YYYY-MM-DD'),
                 end: moment().format('YYYY-MM-DD')
             }
         })
@@ -1855,8 +1833,8 @@ $(document).ready(function () {
 
                 Chart_day_bill.data.datasets[0].data = day_use_energy;
                 Chart_day_bill.data.datasets[0].label = 'หน่วยที่ใช้';
-                Chart_day_bill.data.datasets[1].data = day_bill;
-                Chart_day_bill.data.datasets[1].label = 'ค่าไฟ';
+                // Chart_day_bill.data.datasets[1].data = day_bill;
+                // Chart_day_bill.data.datasets[1].label = 'ค่าไฟ';
                 Chart_day_bill.data.labels = label_mouth;
                 Chart_day_bill.update();
 
@@ -1876,8 +1854,8 @@ $(document).ready(function () {
 
                     Chart_month_bill.data.datasets[0].data = month_use_energy;
                     Chart_month_bill.data.datasets[0].label = 'หน่วยที่ใช้';
-                    Chart_month_bill.data.datasets[1].data = month_bill;
-                    Chart_month_bill.data.datasets[1].label = 'ค่าไฟ';
+                    // Chart_month_bill.data.datasets[1].data = month_bill;
+                    // Chart_month_bill.data.datasets[1].label = 'ค่าไฟ';
                     Chart_month_bill.data.labels = label_eachmonth;
                     Chart_month_bill.update();
 
@@ -1948,7 +1926,7 @@ $(document).ready(function () {
         $(".day-view-page").hide();
 
         Chart_history.options.scales['x'].title.text = "วันที่";
-        $('#chart_name').text('หน่วยไฟฟ้าแต่ละวัน [kWh]');
+        $('#chart_name').text('Monthly Load Bar Chart');
 
         mouthUpdate();
 

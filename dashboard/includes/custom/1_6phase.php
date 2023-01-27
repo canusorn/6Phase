@@ -616,7 +616,7 @@
                                 <div class="col align-self-center">
                                     <div class="description-block ">
                                         <!-- <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> -->
-                                        <h5 class="description-header" id="week_energy"></h5>
+                                        <h4 class="description-header" id="week_energy"></h4>
                                         <span class="description-text">ค่าพลังงานที่ใช้ไป(kWh)</span>
                                     </div>
                                 </div>
@@ -639,12 +639,12 @@
                     </div>
                     <!-- end loading -->
                     <div class="card-header">
-                        <h5 class="card-title">ค่าไฟแต่ละวัน</h5>
+                        <h5 class="card-title">Monthly Load Bar Chart</h5>
                         <div class="card-tools">
                             <!-- <ul class="nav nav-pills ml-auto p-2"> -->
-                            <button type="button" id="month_csvdownload" class="btn btn-outline-secondary text-light btn-sm  month-view-page" title="download csv file">
+                            <!-- <button type="button" id="month_csvdownload" class="btn btn-outline-secondary text-light btn-sm  month-view-page" title="download csv file">
                                 <i class="fa-solid fa-download"></i>&nbsp;<span>CSV</span>
-                            </button>
+                            </button> -->
                             <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
@@ -660,16 +660,15 @@
                                         <div class="description-block ">
                                             <!-- <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> -->
                                             <h5 class="description-header mb-2" id="month_energy"></h5>
-                                            <span class="description-text">หน่วยในเดือนนี้</span>
+                                            <span class="description-text">ค่าพลังงานที่ใช้ไป (kWh)</span>
                                         </div>
                                     </div>
-                                    <div class="row justify-content-center">
+                                    <!-- <div class="row justify-content-center">
                                         <div class="description-block ">
-                                            <!-- <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> -->
                                             <h5 class="description-header mb-2" id="month_bill"></h5>
                                             <span class="description-text">ค่าไฟเดือนนี้</span>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-md-10 ">
                                     <div class="chart">
@@ -690,12 +689,12 @@
                     </div>
                     <!-- end loading -->
                     <div class="card-header">
-                        <h5 class="card-title">ค่าไฟแต่ละเดือน</h5>
+                        <h5 class="card-title">Year Load Bar Chart</h5>
                         <div class="card-tools">
                             <!-- <ul class="nav nav-pills ml-auto p-2"> -->
-                            <button type="button" id="eachmonth_csvdownload" class="btn btn-outline-secondary text-light btn-sm  month-view-page" title="download csv file">
+                            <!-- <button type="button" id="eachmonth_csvdownload" class="btn btn-outline-secondary text-light btn-sm  month-view-page" title="download csv file">
                                 <i class="fa-solid fa-download"></i>&nbsp;<span>CSV</span>
-                            </button>
+                            </button> -->
                             <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
