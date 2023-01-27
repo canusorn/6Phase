@@ -775,7 +775,7 @@ $(document).ready(function () {
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'วันก่อนหน้า',
+                    label: 'หน่วยที่ใช้',
                     data: [],
                     tension: 0.1,
                     backgroundColor: 'rgba(60,141,188,0.5)',
@@ -3209,5 +3209,27 @@ $(document).ready(function () {
         stopScroll();
     });
 
+
+
+//refresh at midnight from https://gist.github.com/ambercouch/f45889db6435299bba22ea1ee6e06d31
+function refreshAt(hours, minutes, seconds) {
+    var now = new Date();
+    var then = new Date();
+
+    if(now.getHours() > hours ||
+        (now.getHours() == hours && now.getMinutes() > minutes) ||
+        now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() >= seconds) {
+        then.setDate(now.getDate() + 1);
+    }
+    then.setHours(hours);
+    then.setMinutes(minutes);
+    then.setSeconds(seconds);
+
+    var timeout = (then.getTime() - now.getTime());
+    setTimeout(function() { window.location.reload(true); }, timeout);
+}
+
+//refresh the page at 23:00:00
+refreshAt(00,05,0);
 
 });
