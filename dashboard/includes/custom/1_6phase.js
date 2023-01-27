@@ -768,6 +768,29 @@ $(document).ready(function () {
             }
         });
 
+
+
+        let width, height, gradient;
+        function getGradient(ctx, chartArea) {
+          const chartWidth = chartArea.right - chartArea.left;
+          const chartHeight = chartArea.bottom - chartArea.top;
+          if (!gradient || width !== chartWidth || height !== chartHeight) {
+            // Create the gradient because this is either the first render
+            // or the size of the chart has changed
+            width = chartWidth;
+            height = chartHeight;
+            gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+            gradient.addColorStop(0,' green');
+            gradient.addColorStop(0.5, 'yellow');
+            gradient.addColorStop(1,'red');
+          }
+        
+          return gradient;
+        }
+
+
+
+        
         weekly_load_bar = new Chart(
             document.getElementById('weekly_load_bar'), {
             type: 'bar',
@@ -778,8 +801,24 @@ $(document).ready(function () {
                     label: 'หน่วยที่ใช้',
                     data: [],
                     tension: 0.1,
-                    backgroundColor: 'rgba(60,141,188,0.5)',
-                    borderColor: 'rgba(60,141,188,0.8)',
+                    backgroundColor: function(context) {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                
+                        if (!chartArea) {
+                          // This case happens on initial chart load
+                          return;
+                        }
+                        return getGradient(ctx, chartArea);},
+                    borderColor: function(context) {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                
+                        if (!chartArea) {
+                          // This case happens on initial chart load
+                          return;
+                        }
+                        return getGradient(ctx, chartArea);},
                     fill: true,
                     pointColor: '#3b8bba',
                     pointStrokeColor: 'rgba(60,141,188,1)',
@@ -1515,6 +1554,7 @@ $(document).ready(function () {
     }
 
     function getweekday() {
+
         $.ajax({
             url: "ajax/custom/1_6phase.php",
             type: "post",
