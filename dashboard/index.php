@@ -21,6 +21,10 @@ $activedevice = ESP_ID;
                     <h1 class="m-0 pr-2">อุปกรณ์บันทึกและแสดงค่าพลังงานไฟฟ้าผ่านเครือข่ายไร้สาย</h1>
                     <span id="device_status" class="badge badge-secondary align-self-center"></span>
                 </div>
+                <div class="col-6">
+                    <p>อาจารย์ที่ปรึกษาปริญญานิพนธ์ อาจารย์บุญช่วย เจริญผล</p>
+                    <p>ผู้จัดทำ<br>นายธนพงศ์ หินซุย<br>นายวันถวิล มีแก้ว</p>
+                </div>
             </div><!-- /.col -->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->

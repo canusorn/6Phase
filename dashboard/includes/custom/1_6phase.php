@@ -18,11 +18,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">ค่าพารามิเตอร์จาก MDB 1</h4>
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- ./card-body -->
@@ -576,7 +576,7 @@
                 <!-- daily load curve -->
                 <div id="weekly-scroll" class="card overview-page">
                     <div class="card-header">
-                        <h5 class="card-title">Daily Load Curve</h5>
+                        <h5 class="card-title">Weekly Load Curve</h5>
                         <div class="card-tools">
                             <ul class="nav nav-pills ml-auto p-2">
                                 <button type="button" class="btn btn-tool text-light" data-card-widget="collapse">
@@ -611,19 +611,10 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="container">
-                            <div class="row justify-content-center">
-                                <div class="col align-self-center">
-                                    <div class="description-block ">
-                                        <!-- <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> -->
-                                        <h4 class="description-header" id="week_energy"></h4>
-                                        <span class="description-text">ค่าพลังงานที่ใช้ไป(kWh)</span>
-                                    </div>
-                                </div>
-                                <div class="col-10 ml-9">
-                                    <div class="chart">
-                                        <canvas id="weekly_load_bar" height="300" style="height: 300px;"></canvas>
-                                    </div>
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <div class="chart">
+                                    <canvas id="weekly_load_bar" height="300" style="height: 300px;"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -747,7 +738,7 @@
         font-size: 14px;
         border: none;
         outline: none;
-        background-color: rgb(60,141,188);
+        background-color: rgb(60, 141, 188);
         color: white;
         cursor: pointer;
         padding: 10px;

@@ -772,25 +772,25 @@ $(document).ready(function () {
 
         let width, height, gradient;
         function getGradient(ctx, chartArea) {
-          const chartWidth = chartArea.right - chartArea.left;
-          const chartHeight = chartArea.bottom - chartArea.top;
-          if (!gradient || width !== chartWidth || height !== chartHeight) {
-            // Create the gradient because this is either the first render
-            // or the size of the chart has changed
-            width = chartWidth;
-            height = chartHeight;
-            gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-            gradient.addColorStop(0,' green');
-            gradient.addColorStop(0.5, 'yellow');
-            gradient.addColorStop(1,'red');
-          }
-        
-          return gradient;
+            const chartWidth = chartArea.right - chartArea.left;
+            const chartHeight = chartArea.bottom - chartArea.top;
+            if (!gradient || width !== chartWidth || height !== chartHeight) {
+                // Create the gradient because this is either the first render
+                // or the size of the chart has changed
+                width = chartWidth;
+                height = chartHeight;
+                gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                gradient.addColorStop(0, ' green');
+                gradient.addColorStop(0.5, 'yellow');
+                gradient.addColorStop(1, 'red');
+            }
+
+            return gradient;
         }
 
 
 
-        
+
         weekly_load_bar = new Chart(
             document.getElementById('weekly_load_bar'), {
             type: 'bar',
@@ -801,24 +801,8 @@ $(document).ready(function () {
                     label: 'หน่วยที่ใช้',
                     data: [],
                     tension: 0.1,
-                    backgroundColor: function(context) {
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-                
-                        if (!chartArea) {
-                          // This case happens on initial chart load
-                          return;
-                        }
-                        return getGradient(ctx, chartArea);},
-                    borderColor: function(context) {
-                        const chart = context.chart;
-                        const {ctx, chartArea} = chart;
-                
-                        if (!chartArea) {
-                          // This case happens on initial chart load
-                          return;
-                        }
-                        return getGradient(ctx, chartArea);},
+                    backgroundColor: [],
+                    borderColor: [],
                     fill: true,
                     pointColor: '#3b8bba',
                     pointStrokeColor: 'rgba(60,141,188,1)',
@@ -900,20 +884,20 @@ $(document).ready(function () {
                     pointHighlightFill: '#fff',
                     pointHighlightStroke: 'rgba(60,141,188,1)',
                     // pointRadius: 0.5,
-                }, 
-                // {
-                //     label: 'ค่าไฟ',
-                //     data: [],
-                //     tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                //     borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                //     pointColor: 'rgba(210, 214, 222, 1)',
-                //     pointStrokeColor: '#c1c7d1',
-                //     pointHighlightFill: '#fff',
-                //     pointHighlightStroke: 'rgba(220,220,220,1)',
-                //     yAxisID: 'yb',
-                //     // pointRadius: 0.5,
-                // }
-            ]
+                },
+                    // {
+                    //     label: 'ค่าไฟ',
+                    //     data: [],
+                    //     tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
+                    //     borderColor: 'rgba(210, 214, 222, 1)', fill: true,
+                    //     pointColor: 'rgba(210, 214, 222, 1)',
+                    //     pointStrokeColor: '#c1c7d1',
+                    //     pointHighlightFill: '#fff',
+                    //     pointHighlightStroke: 'rgba(220,220,220,1)',
+                    //     yAxisID: 'yb',
+                    //     // pointRadius: 0.5,
+                    // }
+                ]
             },
             options: {
                 // Turn off animations and data parsing for performance
@@ -940,7 +924,7 @@ $(document).ready(function () {
                         title: {
                             display: true,
                             text: "วันที่",
-                        },time: {
+                        }, time: {
                             unit: 'day'
                         },
                     },
@@ -982,19 +966,19 @@ $(document).ready(function () {
                     pointHighlightStroke: 'rgba(60,141,188,1)',
                     // pointRadius: 0.5,
                 },
-                //  {
-                //     label: 'ค่าไฟ',
-                //     data: [],
-                //     tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
-                //     borderColor: 'rgba(210, 214, 222, 1)', fill: true,
-                //     pointColor: 'rgba(210, 214, 222, 1)',
-                //     pointStrokeColor: '#c1c7d1',
-                //     pointHighlightFill: '#fff',
-                //     pointHighlightStroke: 'rgba(220,220,220,1)',
-                //     yAxisID: 'yb',
-                //     // pointRadius: 0.5,
-                // }
-            ]
+                    //  {
+                    //     label: 'ค่าไฟ',
+                    //     data: [],
+                    //     tension: 0.1, backgroundColor: 'rgba(210, 214, 222, 0.3)',
+                    //     borderColor: 'rgba(210, 214, 222, 1)', fill: true,
+                    //     pointColor: 'rgba(210, 214, 222, 1)',
+                    //     pointStrokeColor: '#c1c7d1',
+                    //     pointHighlightFill: '#fff',
+                    //     pointHighlightStroke: 'rgba(220,220,220,1)',
+                    //     yAxisID: 'yb',
+                    //     // pointRadius: 0.5,
+                    // }
+                ]
             },
             options: {
                 // Turn off animations and data parsing for performance
@@ -1021,7 +1005,7 @@ $(document).ready(function () {
                         title: {
                             display: true,
                             text: "เดือน",
-                        },time: {
+                        }, time: {
                             unit: 'month'
                         },
                     },
@@ -1328,7 +1312,16 @@ $(document).ready(function () {
                     $("#frequency6").html(json.f6[0]);
                     $("#pf6").html(json.pf6[0]);
 
-                    week_day_power[dayofweek] = parseFloat(json.e1[0]) - min_e1 + parseFloat(json.e2[0]) - min_e2 + parseFloat(json.e3[0]) - min_e3 + parseFloat(json.e4[0]) - min_e4 + parseFloat(json.e5[0]) - min_e5 + parseFloat(json.e6[0]) - min_e6;
+                    let _esum = parseFloat(json.e1[0]) - min_e1 + parseFloat(json.e2[0]) - min_e2 + parseFloat(json.e3[0]) - min_e3 + parseFloat(json.e4[0]) - min_e4 + parseFloat(json.e5[0]) - min_e5 + parseFloat(json.e6[0]) - min_e6;
+                    week_day_power[dayofweek] = _esum;
+
+                    let color;
+                    if (_esum < 35) { color = 'green'; }
+                    else if (_esum < 50) { color = 'yellow'; }
+                    else { color = 'red'; }
+
+                    weekly_load_bar.data.datasets[0].backgroundColor[dayofweek] = color;
+                    weekly_load_bar.data.datasets[0].borderColor[dayofweek] = color;
                     weekly_load_bar.update();
 
                 }
@@ -1583,6 +1576,7 @@ $(document).ready(function () {
                     _week_day_power.push(esum);
                     eAllWeek += esum;
                     // week_day_label.push((json.time1[index]).split(' ')[0]);
+
                 });
 
                 // generate minute
@@ -1595,6 +1589,7 @@ $(document).ready(function () {
                 week_day_label = days;
 
                 // add nan
+                let bar_colors = [];
                 let i1 = 0;
                 for (let i = 0; i < week_day_label.length; i++) {
                     if (week_day_label[i] == json.time1[i1]) {
@@ -1603,11 +1598,21 @@ $(document).ready(function () {
                     } else {
                         week_day_power[i] = 0;
                     }
+
+                    let color;
+                    if (week_day_power[i] < 35) { color = 'green'; }
+                    else if (week_day_power[i] < 50) { color = 'yellow'; }
+                    else { color = 'red'; }
+
+                    bar_colors.push(color);
                 }
 
-                $("#week_energy").html(eAllWeek);
                 weekly_load_bar.data.labels = week_day_label;
                 weekly_load_bar.data.datasets[0].data = week_day_power;
+                weekly_load_bar.data.datasets[0].backgroundColor = bar_colors;
+                weekly_load_bar.data.datasets[0].borderColor = bar_colors;
+
+                // console.log(weekly_load_bar.data.datasets[0].borderColor);
                 weekly_load_bar.update();
 
             }
@@ -3229,25 +3234,25 @@ $(document).ready(function () {
 
 
 
-//refresh at midnight from https://gist.github.com/ambercouch/f45889db6435299bba22ea1ee6e06d31
-function refreshAt(hours, minutes, seconds) {
-    var now = new Date();
-    var then = new Date();
+    //refresh at midnight from https://gist.github.com/ambercouch/f45889db6435299bba22ea1ee6e06d31
+    function refreshAt(hours, minutes, seconds) {
+        var now = new Date();
+        var then = new Date();
 
-    if(now.getHours() > hours ||
-        (now.getHours() == hours && now.getMinutes() > minutes) ||
-        now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() >= seconds) {
-        then.setDate(now.getDate() + 1);
+        if (now.getHours() > hours ||
+            (now.getHours() == hours && now.getMinutes() > minutes) ||
+            now.getHours() == hours && now.getMinutes() == minutes && now.getSeconds() >= seconds) {
+            then.setDate(now.getDate() + 1);
+        }
+        then.setHours(hours);
+        then.setMinutes(minutes);
+        then.setSeconds(seconds);
+
+        var timeout = (then.getTime() - now.getTime());
+        setTimeout(function () { window.location.reload(true); }, timeout);
     }
-    then.setHours(hours);
-    then.setMinutes(minutes);
-    then.setSeconds(seconds);
 
-    var timeout = (then.getTime() - now.getTime());
-    setTimeout(function() { window.location.reload(true); }, timeout);
-}
-
-//refresh the page at 23:00:00
-refreshAt(00,05,0);
+    //refresh the page at 23:00:00
+    refreshAt(00, 05, 0);
 
 });
