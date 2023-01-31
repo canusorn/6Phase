@@ -769,28 +769,6 @@ $(document).ready(function () {
         });
 
 
-
-        let width, height, gradient;
-        function getGradient(ctx, chartArea) {
-            const chartWidth = chartArea.right - chartArea.left;
-            const chartHeight = chartArea.bottom - chartArea.top;
-            if (!gradient || width !== chartWidth || height !== chartHeight) {
-                // Create the gradient because this is either the first render
-                // or the size of the chart has changed
-                width = chartWidth;
-                height = chartHeight;
-                gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-                gradient.addColorStop(0, ' green');
-                gradient.addColorStop(0.5, 'yellow');
-                gradient.addColorStop(1, 'red');
-            }
-
-            return gradient;
-        }
-
-
-
-
         weekly_load_bar = new Chart(
             document.getElementById('weekly_load_bar'), {
             type: 'bar',
@@ -808,7 +786,7 @@ $(document).ready(function () {
                     pointStrokeColor: 'rgba(60,141,188,1)',
                     pointHighlightFill: '#fff',
                     pointHighlightStroke: 'rgba(60,141,188,1)',
-                    yAxisID: 'y',
+                    yAxisID: 'y'
                     // pointRadius: 0.5,
                 }]
             },
@@ -824,7 +802,7 @@ $(document).ready(function () {
                 },
                 plugins: {
                     legend: {
-                        display: true,
+                        display: false,
                     },
                     datalabels: {
                         align: 'end',
