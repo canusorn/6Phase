@@ -64,7 +64,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="energy1"></h5>
-                                        <span class="description-text">Today Energy [kWh]</span>
+                                        <span class="description-text">Today Energy [<span style="text-transform: lowercase;">k</span>W<span style="text-transform: lowercase;">h</span>]
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -72,7 +72,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="frequency1"></h5>
-                                        <span class="description-text">Frequency [Hz]</span>
+                                        <span class="description-text">Frequency [H<span style="text-transform: lowercase;">z</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -124,7 +124,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="energy2"></h5>
-                                        <span class="description-text">Today Energy [kWh]</span>
+                                        <span class="description-text">Today Energy [<span style="text-transform: lowercase;">k</span>W<span style="text-transform: lowercase;">h</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -132,7 +132,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="frequency2"></h5>
-                                        <span class="description-text">Frequency [Hz]</span>
+                                        <span class="description-text">Frequency [H<span style="text-transform: lowercase;">z</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -200,7 +200,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="energy3"></h5>
-                                        <span class="description-text">Today Energy [kWh]</span>
+                                        <span class="description-text">Today Energy [<span style="text-transform: lowercase;">k</span>W<span style="text-transform: lowercase;">h</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -208,7 +208,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="frequency3"></h5>
-                                        <span class="description-text">Frequency [Hz]</span>
+                                        <span class="description-text">Frequency [H<span style="text-transform: lowercase;">z</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -283,7 +283,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="energy4"></h5>
-                                        <span class="description-text">Today Energy [kWh]</span>
+                                        <span class="description-text">Today Energy [<span style="text-transform: lowercase;">k</span>W<span style="text-transform: lowercase;">h</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -291,7 +291,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="frequency4"></h5>
-                                        <span class="description-text">Frequency [Hz]</span>
+                                        <span class="description-text">Frequency [H<span style="text-transform: lowercase;">z</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -343,7 +343,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="energy5"></h5>
-                                        <span class="description-text">Today Energy [kWh]</span>
+                                        <span class="description-text">Today Energy [<span style="text-transform: lowercase;">k</span>W<span style="text-transform: lowercase;">h</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -351,7 +351,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="frequency5"></h5>
-                                        <span class="description-text">Frequency [Hz]</span>
+                                        <span class="description-text">Frequency [H<span style="text-transform: lowercase;">z</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -403,7 +403,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="energy6"></h5>
-                                        <span class="description-text">Today Energy [kWh]</span>
+                                        <span class="description-text">Today Energy [<span style="text-transform: lowercase;">k</span>W<span style="text-transform: lowercase;">h</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -411,7 +411,7 @@
                                     <div class="description-block">
                                         <!-- <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span> -->
                                         <h5 class="description-header mb-2" id="frequency6"></h5>
-                                        <span class="description-text">Frequency [Hz]</span>
+                                        <span class="description-text">Frequency [H<span style="text-transform: lowercase;">z</span>]</span>
                                     </div>
                                     <!-- /.description-block -->
                                 </div>
@@ -651,7 +651,7 @@
                                         <div class="description-block ">
                                             <!-- <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> 0%</span> -->
                                             <h5 class="description-header mb-2" id="month_energy"></h5>
-                                            <span class="description-text">ค่าพลังงานที่ใช้ไป (kWh)</span>
+                                            <span class="description-text">ค่าพลังงานที่ใช้ไป (<span style="text-transform: lowercase;">k</span>W<span style="text-transform: lowercase;">h</span>)</span>
                                         </div>
                                     </div>
                                     <!-- <div class="row justify-content-center">
