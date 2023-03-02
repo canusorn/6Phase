@@ -27,6 +27,7 @@
 
                     <!-- ./card-body -->
                     <div class="card-body">
+                        <p>โหลดส่วนใหญ่จะเป็นระบบแสงสว่าง และเต้ารับ</p>
                         <div class="container border">
                             <h4><svg xmlns="http://www.w3.org/2000/svg" height="1.5rem" fill="currentColor" class="bi bi-1-square" viewBox="0 0 16 16">
                                     <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383h1.312Z" />
@@ -245,7 +246,7 @@
 
                     <!-- ./card-body -->
                     <div class="card-body">
-
+                        <p>โหลดส่วนใหญ่จะเป็นระบบปรับอากาศ</p>
                         <div class="container border">
                             <h4><svg xmlns="http://www.w3.org/2000/svg" height="1.5rem" fill="currentColor" class="bi bi-1-square" viewBox="0 0 16 16">
                                     <path d="M9.283 4.002V12H7.971V5.338h-.065L6.072 6.656V5.385l1.899-1.383h1.312Z" />
@@ -611,6 +612,11 @@
                     </div>
 
                     <div class="card-body">
+                        <p class="h5 text-center">
+                            <span class="badge badge-success">ใช้พลังงานน้อย </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="badge badge-warning">ใช้พลังงานปานกลาง </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="badge badge-danger">ใช้พลังงานค่อนข้างมาก </span>
+                        </p>
                         <div class="row justify-content-center">
                             <div class="col-12">
                                 <div class="chart">

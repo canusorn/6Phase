@@ -520,7 +520,7 @@ $(document).ready(function () {
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'วันก่อนหน้า',
+                    label: moment().subtract(1, 'days').endOf('days').format('YYYY-MM-DD'),
                     data: [],
                     tension: 0.1,
                     backgroundColor: 'rgba(255,255,0,0.1)',
@@ -588,7 +588,7 @@ $(document).ready(function () {
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'วันล่าสุด',
+                    label: moment().format('YYYY-MM-DD'),
                     data: [],
                     tension: 0.1,
                     backgroundColor: 'rgba(255,165,0,0.1)',
@@ -819,7 +819,7 @@ $(document).ready(function () {
                         },
                         title: {
                             display: true,
-                            text: "Time of Day(h)",
+                            text: "Day",
                         }
                     },
                     y: {
@@ -1359,7 +1359,6 @@ $(document).ready(function () {
                 });
 
                 yesterday_min_power.reverse();
-
                 daily_load_curve.data.datasets[0].data = yesterday_min_power;
                 daily_load_curve.data.labels = yesterday_min_label1;
                 daily_load_curve.update();
